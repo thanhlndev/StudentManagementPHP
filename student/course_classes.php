@@ -57,41 +57,110 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
+// // ==========================================
+// // 2. TRUY VẤN DANH SÁCH LỚP HỌC PHẦN ĐỂ HIỂN THỊ
+// // ==========================================
+// $keyword = trim($_GET['keyword'] ?? '');
+// $filter_hk = $_GET['filter_hk'] ?? '';
+
+// // Truy vấn danh sách học kỳ cho Dropdown lọc
+// $semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters ORDER BY maHK DESC")->fetchAll();
+
+// // Câu lệnh Query thông minh: Dùng Subquery để lấy sĩ số và trạng thái đăng ký ngay trong 1 lần quét
+// $baseSql = "SELECT cc.maLHP, c.tenMH, s.tenHK, t.hoTenGV,
+//             (SELECT COUNT(*) FROM Grades g WHERE g.maLHP = cc.maLHP) AS soLuongSV,
+//             (SELECT COUNT(*) FROM Grades g2 WHERE g2.maLHP = cc.maLHP AND g2.maSV = :maSV) AS daDangKy
+//             FROM CourseClasses cc
+//             JOIN Courses c ON cc.maMH = c.maMH
+//             JOIN Semesters s ON cc.maHK = s.maHK
+//             JOIN Teachers t ON cc.maGV = t.maGV
+//             WHERE 1=1";
+
+// $params = [':maSV' => $maSV];
+
+// if ($keyword !== '') {
+//     $baseSql .= " AND (cc.maLHP LIKE :kw OR c.tenMH LIKE :kw)";
+//     $params[':kw'] = "%$keyword%";
+// }
+// if ($filter_hk !== '') {
+//     $baseSql .= " AND cc.maHK = :hk";
+//     $params[':hk'] = $filter_hk;
+// }
+
+// $baseSql .= " ORDER BY s.maHK DESC, c.tenMH ASC";
+// $stmt = $pdo->prepare($baseSql);
+// $stmt->execute($params);
+// $classes = $stmt->fetchAll();
+
 // ==========================================
-// 2. TRUY VẤN DANH SÁCH LỚP HỌC PHẦN ĐỂ HIỂN THỊ
+// 2. TRUY VẤN DANH SÁCH LỚP HỌC PHẦN (ĐÃ TỐI ƯU)
 // ==========================================
 $keyword = trim($_GET['keyword'] ?? '');
 $filter_hk = $_GET['filter_hk'] ?? '';
-
-// Truy vấn danh sách học kỳ cho Dropdown lọc
 $semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters ORDER BY maHK DESC")->fetchAll();
 
-// Câu lệnh Query thông minh: Dùng Subquery để lấy sĩ số và trạng thái đăng ký ngay trong 1 lần quét
-$baseSql = "SELECT cc.maLHP, c.tenMH, s.tenHK, t.hoTenGV,
-            (SELECT COUNT(*) FROM Grades g WHERE g.maLHP = cc.maLHP) AS soLuongSV,
-            (SELECT COUNT(*) FROM Grades g2 WHERE g2.maLHP = cc.maLHP AND g2.maSV = :maSV) AS daDangKy
-            FROM CourseClasses cc
-            JOIN Courses c ON cc.maMH = c.maMH
-            JOIN Semesters s ON cc.maHK = s.maHK
-            JOIN Teachers t ON cc.maGV = t.maGV
-            WHERE 1=1";
+// Khởi tạo mảng tham số chuẩn
+$params = [
+    ':maSV' => $maSV,
+    ':maSV_1' => $maSV
+];
 
-$params = [':maSV' => $maSV];
+$baseSql = "SELECT 
+    cc.maLHP, 
+    c.tenMH, 
+    s.tenHK, 
+    t.hoTenGV,
+    COALESCE(g_agg.soLuongSV, 0) AS soLuongSV,
+    COALESCE(g_agg.daDangKy, 0) AS daDangKy,
+    max_diem.diemCaoNhat
+FROM CourseClasses cc
+JOIN Courses c ON cc.maMH = c.maMH
+JOIN Semesters s ON cc.maHK = s.maHK
+JOIN Teachers t ON cc.maGV = t.maGV
 
-if ($keyword !== '') {
-    $baseSql .= " AND (cc.maLHP LIKE :kw OR c.tenMH LIKE :kw)";
-    $params[':kw'] = "%$keyword%";
+LEFT JOIN (
+    SELECT 
+        maLHP,
+        COUNT(maSV) AS soLuongSV,
+        SUM(CASE WHEN maSV = :maSV THEN 1 ELSE 0 END) AS daDangKy
+    FROM Grades
+    GROUP BY maLHP
+) g_agg
+ ON cc.maLHP = g_agg.maLHP
+
+LEFT JOIN (
+    SELECT 
+        cc_sub.maMH, 
+        MAX(g_sub.diemTong) AS diemCaoNhat
+    FROM Grades g_sub
+    JOIN CourseClasses cc_sub ON g_sub.maLHP = cc_sub.maLHP
+    WHERE g_sub.maSV = :maSV_1
+    GROUP BY cc_sub.maMH
+) max_diem ON cc.maMH = max_diem.maMH
+
+WHERE 1=1";
+
+// Xử lý động (Dynamic Query Building) - Bulletproof
+if ($keyword !== '') { 
+    // Tách biệt kw1 và kw2 để tránh lỗi Native Prepare Statement
+    $baseSql .= " AND (cc.maLHP LIKE :kw1 OR c.tenMH LIKE :kw2)"; 
+    $params[':kw1'] = "%$keyword%"; 
+    $params[':kw2'] = "%$keyword%"; 
 }
-if ($filter_hk !== '') {
-    $baseSql .= " AND cc.maHK = :hk";
-    $params[':hk'] = $filter_hk;
+
+if ($filter_hk !== '') { 
+    $baseSql .= " AND cc.maHK = :hk"; 
+    $params[':hk'] = $filter_hk; 
 }
 
+// Bổ sung lại ORDER BY để UX được nhất quán
 $baseSql .= " ORDER BY s.maHK DESC, c.tenMH ASC";
+
 $stmt = $pdo->prepare($baseSql);
 $stmt->execute($params);
 $classes = $stmt->fetchAll();
 ?>
+
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Đăng ký Học phần</h1>
@@ -152,8 +221,16 @@ $classes = $stmt->fetchAll();
                                 $isReg = ($c['daDangKy'] > 0);
                             ?>
                             <tr>
-                                <td class="font-weight-bold text-dark">#<?= $c['maLHP'] ?></td>
-                                <td class="text-left font-weight-bold text-primary"><?= htmlspecialchars($c['tenMH']) ?></td>
+                                <td>#<?= $c['maLHP'] ?></td>
+                                <td>
+                                    <?= htmlspecialchars($c['tenMH']) ?>
+                                    <?php 
+                                    if ($c['diemCaoNhat'] !== null) {
+                                        if ($c['diemCaoNhat'] >= 4.0) echo ' <span class="badge badge-info">(học cải thiện)</span>';
+                                        else echo ' <span class="badge badge-danger">(học lại)</span>';
+                                    }
+                                    ?>
+                                </td>
                                 <td><?= htmlspecialchars($c['tenHK']) ?></td>
                                 <td><?= htmlspecialchars($c['hoTenGV']) ?></td>
                                 
