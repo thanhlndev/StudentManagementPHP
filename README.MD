@@ -1,6 +1,6 @@
-# StudentManagement System
+# Student Management System
 
-Hệ thống Quản lý Đào tạo Tín chỉ (Credit-based Academic Management System) được thiết kế để quản lý dữ liệu sinh viên, giảng viên, môn học và kết quả học tập.
+Hệ thống Quản lý Đào tạo Tín chỉ được thiết kế nhằm tối ưu hóa công tác quản lý dữ liệu sinh viên, giảng viên và học phần. Hệ thống tập trung vào tính toàn vẹn dữ liệu, hiệu năng xử lý cao và trải nghiệm người dùng tối ưu.
 
 ## Công nghệ sử dụng
 
@@ -13,36 +13,39 @@ Hệ thống Quản lý Đào tạo Tín chỉ (Credit-based Academic Management
 
 Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoại (Foreign Keys) để đảm bảo tính toàn vẹn dữ liệu:
 
-- **Accounts:** Quản lý đăng nhập và phân quyền (Admin, Teacher, Student).
-- **Faculties & Classes:** Phân cấp đơn vị đào tạo.
-- **CourseClasses:** Quản lý các lớp học phần (khớp với học kỳ và giảng viên).
-- **Grades:** Lưu trữ kết quả học tập với Virtual Columns (tự động tính điểm tổng và quy đổi điểm chữ).
+- **Module Nhân sự & Đơn vị:** Accounts, Faculties, Teachers, Classes, Students.
+
+- **Module Đào tạo:** Courses, Semesters, CourseClasses.
+
+- **Module Quản lý thời gian & Tài nguyên:** Rooms, ClassSchedules (hỗ trợ kiểm soát xung đột tài nguyên thời gian thực).
+
+- **Module Kết quả: Grades với Virtual Columns** (tự động tính điểm tổng và quy đổi điểm chữ theo quy chế tín chỉ).
 
 ## Các Module chính
 
-1. **Quản trị (Admin):**
-   - Quản lý dữ liệu tập trung (Sinh viên, Giảng viên, Khoa, Môn học).
-   - Dashboard phân tích 3 tầng (Chỉ số, Phân bổ khoa, Cảnh báo tỷ lệ trượt).
-   - Kiểm soát khóa/mở điểm toàn hệ thống.
-2. **Giảng viên (Teacher):**
-   - Quản lý danh sách lớp được phân công.
-   - Nhập điểm quá trình và điểm thi.
-   - Xem nhanh trạng thái khóa/mở điểm của từng lớp.
-3. **Sinh viên (Student):**
-   - Đăng ký học phần (sử dụng Transaction để chống Race Condition).
-   - Xem kết quả học tập & Tính toán GPA tích lũy.
-   - Xem thông tin giảng viên và danh sách bạn học.
+1. **Admin:** Quản trị dữ liệu tập trung, phân tích Dashboard, quản lý phòng học và lịch học (xếp lịch theo tài nguyên).
+
+2. **Teacher:** Quản lý lớp học phần được phân công, nhập điểm và theo dõi trạng thái khóa/mở điểm.
+
+3. **Student:** Đăng ký học phần, xem kết quả học tập, tính toán GPA và theo dõi thời khóa biểu cá nhân với bộ lọc trùng lịch thông minh.
 
 ## Thiết lập môi trường
 
 1. Yêu cầu **XAMPP** (hoặc môi trường LAMP/WAMP tương tự).
-2. Import file `database.sql` vào MySQL.
+2. Import file `qlsv.sql` vào MySQL.
 3. Cấu hình `config/database.php` với thông tin kết nối DB của bạn.
 4. Truy cập hệ thống qua: `http://localhost/StudentManagement/`
 
 ## Best Practices đã áp dụng
 
-- **Data Integrity:** Sử dụng `Transactions` cho các tác vụ ghi danh để tránh xung đột (Race Condition).
-- **Security:** Mã hóa mật khẩu bằng `password_hash()` (Bcrypt).
-- **UX/UI:** Tối ưu hóa Dashboard với `Chart.js` và thiết kế Responsive cho mọi thiết bị.
-- **Maintainability:** Tách biệt cấu trúc thư mục, logic xử lý dữ liệu và giao diện hiển thị.
+**Collision Detection:** Thuật toán phát hiện xung đột thời gian (Overlap Detection) giúp ngăn chặn sinh viên đăng ký môn bị trùng lịch và ngăn Admin xếp lịch trùng phòng/giảng viên.
+
+**Concurrency Control:** Sử dụng Transaction và Pessimistic Locking (FOR UPDATE) để đảm bảo tính toàn vẹn khi đăng ký học phần, chống lỗi Race Condition khi quá tải sĩ số.
+
+**Performance Optimization:** Sử dụng kỹ thuật GROUP_CONCAT trong SQL để lấy dữ liệu lịch học chỉ với 1 truy vấn duy nhất, loại bỏ lỗi N+1 Query.
+
+**Dynamic Filtering:** Bộ lọc NOT EXISTS hỗ trợ sinh viên ẩn các môn học bị trùng lịch học ngay trong danh sách đăng ký.
+
+**Security:** Mã hóa mật khẩu sử dụng password_hash() (Bcrypt).
+
+**UX/UI:** Giao diện Responsive tích hợp công cụ lọc thông minh theo Khoa và bộ lọc thời gian thực.
