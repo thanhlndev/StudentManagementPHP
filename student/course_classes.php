@@ -12,21 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     try {
         $pdo->beginTransaction();
 
-        // Khóa dòng chống đăng ký vượt quá sĩ số (Race Condition)
         $lockStmt = $pdo->prepare("SELECT maLHP FROM CourseClasses WHERE maLHP = ? FOR UPDATE");
         $lockStmt->execute([$maLHP_reg]);
 
-        // 1. Kiểm tra xem sinh viên đã đăng ký môn này chưa
         $checkReg = $pdo->prepare("SELECT COUNT(*) FROM Grades WHERE maLHP = ? AND maSV = ?");
         $checkReg->execute([$maLHP_reg, $maSV]);
         $isRegistered = $checkReg->fetchColumn();
 
-        // 2. Đếm số lượng sinh viên hiện tại trong lớp
         $checkCount = $pdo->prepare("SELECT COUNT(*) FROM Grades WHERE maLHP = ?");
         $checkCount->execute([$maLHP_reg]);
         $currentCount = $checkCount->fetchColumn();
-
-        // 3. KIỂM TRA TRÙNG LỊCH HỌC (Time Collision Detection)
         // Lấy lịch của lớp muốn đăng ký (new_sch)
         //         ↓
         // So sánh với tất cả lịch các lớp mà sinh viên đã đăng ký (old_sch)
@@ -54,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmtCollision->execute([$maLHP_reg, $maSV]);
         $isColliding = $stmtCollision->fetchColumn();
 
-        // Phân luồng xử lý
         if ($isRegistered > 0) {
             $_SESSION['msg'] = "Thất bại: Bạn đã đăng ký Lớp học phần #$maLHP_reg từ trước!";
             $_SESSION['msg_type'] = "warning";
@@ -85,18 +79,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // ==========================================
-// 2. TRUY VẤN DANH SÁCH LỚP HỌC PHẦN (ĐÃ TỐI ƯU & THÊM LỊCH HỌC)
+// 2. TRUY VẤN DANH SÁCH LỚP HỌC PHẦN 
 // ==========================================
 $keyword = trim($_GET['keyword'] ?? '');
 $filter_hk = $_GET['filter_hk'] ?? '';
-$hide_conflict = isset($_GET['hide_conflict']) ? 1 : 0; // Lấy trạng thái của Checkbox
+$hide_conflict = isset($_GET['hide_conflict']) ? 1 : 0;
+
+// [MỚI] Lấy Mã Khoa của sinh viên hiện tại để làm màng lọc
+$stmtKhoa = $pdo->prepare("
+    SELECT cl.maKhoa 
+    FROM students s 
+    JOIN classes cl ON s.maLop = cl.maLop 
+    WHERE s.maSV = ?
+");
+$stmtKhoa->execute([$maSV]);
+$maKhoaSV = $stmtKhoa->fetchColumn();
 
 $semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters ORDER BY maHK DESC")->fetchAll();
 
-// Khởi tạo mảng tham số chuẩn
+// Đưa maKhoaSV vào mảng tham số chuẩn
 $params = [
     ':maSV' => $maSV,
-    ':maSV_1' => $maSV
+    ':maSV_1' => $maSV,
+    ':maKhoaSV' => $maKhoaSV
 ];
 
 $baseSql = "SELECT 
@@ -144,9 +149,10 @@ LEFT JOIN (
     GROUP BY cs.maLHP
 ) lich ON cc.maLHP = lich.maLHP
 
-WHERE 1=1";
+WHERE 1=1 
+  AND c.maKhoa = :maKhoaSV"; // [MỚI] Bắt buộc môn học phải thuộc Khoa của sinh viên
 
-// Xử lý động (Dynamic Query Building) - Bulletproof
+// Xử lý động (Dynamic Query Building)
 if ($keyword !== '') {
     $baseSql .= " AND (cc.maLHP LIKE :kw1 OR c.tenMH LIKE :kw2)";
     $params[':kw1'] = "%$keyword%";
@@ -158,7 +164,6 @@ if ($filter_hk !== '') {
     $params[':hk'] = $filter_hk;
 }
 
-// LOGIC BỘ LỌC CHỐNG TRÙNG LỊCH (NOT EXISTS)
 if ($hide_conflict) {
     $baseSql .= " AND NOT EXISTS (
         SELECT 1 
@@ -167,14 +172,13 @@ if ($hide_conflict) {
         JOIN Grades g_conflict ON old_sch.maLHP = g_conflict.maLHP
         WHERE new_sch.maLHP = cc.maLHP 
           AND g_conflict.maSV = :maSV_conflict
-          AND old_sch.maLHP != new_sch.maLHP -- Bỏ qua chính những môn sinh viên đã đăng ký
+          AND old_sch.maLHP != new_sch.maLHP 
           AND new_sch.start_period < (old_sch.start_period + old_sch.num_periods)
           AND old_sch.start_period < (new_sch.start_period + new_sch.num_periods)
     )";
     $params[':maSV_conflict'] = $maSV;
 }
 
-// Bổ sung lại ORDER BY để UX được nhất quán
 $baseSql .= " ORDER BY s.maHK DESC, c.tenMH ASC";
 
 $stmt = $pdo->prepare($baseSql);
@@ -198,8 +202,8 @@ $classes = $stmt->fetchAll();
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between bg-light">
-        <h6 class="m-0 font-weight-bold text-primary mb-3 mb-lg-0"><i class="fas fa-book mr-1"></i> Danh sách Lớp học
-            phần mở trong kỳ</h6>
+        <h6 class="m-0 font-weight-bold text-primary mb-3 mb-lg-0"><i class="fas fa-book mr-1"></i> Danh sách Học phần
+            Khoa <?= htmlspecialchars($maKhoaSV) ?></h6>
 
         <form method="GET" action="index.php" class="form-inline mb-0">
             <input type="hidden" name="page" value="course_classes">
