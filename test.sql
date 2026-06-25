@@ -110,6 +110,64 @@ CREATE TABLE Grades (
     CONSTRAINT FK_Grades_Student FOREIGN KEY (maSV) REFERENCES Students(maSV),
     CONSTRAINT FK_Grades_CC FOREIGN KEY (maLHP) REFERENCES CourseClasses(maLHP)
 );
+-- ==========================================================
+-- MODULE QUẢN LÝ THỜI GIAN VÀ LỊCH HỌC
+-- ==========================================================
+-- 1. Tạo bảng Rooms (Quản lý Phòng học)
+CREATE TABLE `rooms` (
+    `room_id` int(11) NOT NULL AUTO_INCREMENT,
+    `room_name` varchar(50) NOT NULL,
+    `capacity` int(11) NOT NULL DEFAULT 50,
+    `room_type` varchar(50) DEFAULT 'Lý thuyết',
+    PRIMARY KEY (`room_id`),
+    UNIQUE KEY `idx_room_name` (`room_name`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+-- Thêm dữ liệu mẫu cho Phòng học
+INSERT INTO `rooms` (`room_name`, `capacity`, `room_type`)
+VALUES ('A1-101', 80, 'Lý thuyết'),
+    ('A1-102', 80, 'Lý thuyết'),
+    ('B2-201', 40, 'Thực hành máy tính'),
+    ('B2-202', 40, 'Thực hành máy tính'),
+    ('C3-301', 120, 'Hội trường');
+-- 2. Tạo bảng ClassSchedules (Ma trận Lịch học)
+CREATE TABLE `class_schedules` (
+    `schedule_id` int(11) NOT NULL AUTO_INCREMENT,
+    `maLHP` int(11) NOT NULL,
+    `room_id` int(11) NOT NULL,
+    `day_of_week` tinyint(4) NOT NULL COMMENT '2=Thứ 2, ..., 8=Chủ nhật',
+    `start_period` tinyint(4) NOT NULL COMMENT 'Tiết bắt đầu (1-15)',
+    `num_periods` tinyint(4) NOT NULL COMMENT 'Số tiết kéo dài',
+    `start_date` date DEFAULT NULL,
+    `end_date` date DEFAULT NULL,
+    PRIMARY KEY (`schedule_id`),
+    KEY `FK_Schedule_CC` (`maLHP`),
+    KEY `FK_Schedule_Room` (`room_id`),
+    CONSTRAINT `FK_Schedule_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`) ON DELETE CASCADE,
+    CONSTRAINT `FK_Schedule_Room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+-- 3. Đánh Composite Indexes (Bắt buộc để chống nghẽn CSDL khi check trùng lịch)
+ALTER TABLE `class_schedules`
+ADD INDEX `idx_time_check` (`day_of_week`, `start_period`, `num_periods`),
+    ADD INDEX `idx_room_time` (`room_id`, `day_of_week`);
+-- Thêm dữ liệu lịch học mẫu (Liên kết với CourseClasses cũ)
+-- Giả sử: Học kỳ 1 (HK2023.1) bắt đầu từ 05/09/2023 đến 15/01/2024
+INSERT INTO `class_schedules` (
+        `maLHP`,
+        `room_id`,
+        `day_of_week`,
+        `start_period`,
+        `num_periods`,
+        `start_date`,
+        `end_date`
+    )
+VALUES (1, 1, 2, 1, 3, '2023-09-05', '2024-01-15'),
+    -- LHP 1 (CS101): Thứ 2, tiết 1-3, phòng A1-101
+    (1, 3, 4, 7, 2, '2023-09-05', '2024-01-15'),
+    -- LHP 1 (CS101): Thứ 4, tiết 7-8, phòng B2-201 (Thực hành)
+    (2, 2, 3, 4, 3, '2023-09-05', '2024-01-15'),
+    -- LHP 2 (CS102): Thứ 3, tiết 4-6, phòng A1-102
+    (3, 1, 2, 4, 3, '2023-09-05', '2024-01-15');
+-- LHP 3 (EC201): Thứ 2, tiết 4-6, phòng A1-101
 -- 2. Chèn 10 dòng vào Faculties
 INSERT INTO Faculties (maKhoa, tenKhoa, diaChi, email, sdt)
 VALUES (
