@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2026 at 11:28 AM
+-- Generation Time: Jun 25, 2026 at 08:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -95,6 +95,33 @@ INSERT INTO `classes` (`maLop`, `tenLop`, `email`, `maKhoa`, `maGV`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `class_schedules`
+--
+
+CREATE TABLE `class_schedules` (
+  `schedule_id` int(11) NOT NULL,
+  `maLHP` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `day_of_week` tinyint(4) NOT NULL COMMENT '2=Thứ 2, ..., 8=Chủ nhật',
+  `start_period` tinyint(4) NOT NULL COMMENT 'Tiết bắt đầu (1-15)',
+  `num_periods` tinyint(4) NOT NULL COMMENT 'Số tiết kéo dài',
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `class_schedules`
+--
+
+INSERT INTO `class_schedules` (`schedule_id`, `maLHP`, `room_id`, `day_of_week`, `start_period`, `num_periods`, `start_date`, `end_date`) VALUES
+(1, 1, 1, 2, 1, 3, '2023-09-05', '2024-01-15'),
+(2, 1, 3, 4, 7, 2, '2023-09-05', '2024-01-15'),
+(3, 2, 2, 3, 4, 3, '2023-09-05', '2024-01-15'),
+(4, 3, 1, 2, 4, 3, '2023-09-05', '2024-01-15');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `courseclasses`
 --
 
@@ -118,7 +145,7 @@ INSERT INTO `courseclasses` (`maLHP`, `maMH`, `maHK`, `maGV`, `isLocked`) VALUES
 (5, 'EN101', 'HK2023.2', 'gv05', 0),
 (6, 'CH301', 'HK2024.1', 'gv07', 0),
 (7, 'AU401', 'HK2024.1', 'gv08', 0),
-(8, 'LW501', 'HK2024.2', 'gv09', 0),
+(8, 'LW501', 'HK2024.2', 'gv09', 1),
 (9, 'TO601', 'HK2024.2', 'gv10', 0),
 (10, 'MA101', 'HK2023.1', 'gv01', 0);
 
@@ -202,8 +229,8 @@ CREATE TABLE `grades` (
 
 INSERT INTO `grades` (`maSV`, `maLHP`, `diem1`, `diem2`, `diemThi`) VALUES
 ('sv01', 1, 9.50, 9.00, 8.00),
-('sv01', 8, NULL, NULL, NULL),
-('sv01', 10, 8.00, 9.00, 8.50),
+('sv01', 8, 0.00, 0.00, 0.00),
+('sv01', 10, 8.00, 8.00, 8.50),
 ('sv02', 1, 0.00, 0.00, 0.00),
 ('sv03', 2, 7.50, 7.50, 7.50),
 ('sv04', 3, 7.00, 7.00, 6.50),
@@ -211,7 +238,31 @@ INSERT INTO `grades` (`maSV`, `maLHP`, `diem1`, `diem2`, `diemThi`) VALUES
 ('sv06', 5, 5.50, 5.50, 5.00),
 ('sv08', 6, 4.50, 4.50, 4.50),
 ('sv09', 7, 3.00, 3.00, 3.00),
-('sv10', 8, NULL, NULL, NULL);
+('sv10', 8, 8.00, 8.00, 8.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `room_id` int(11) NOT NULL,
+  `room_name` varchar(50) NOT NULL,
+  `capacity` int(11) NOT NULL DEFAULT 50,
+  `room_type` varchar(50) DEFAULT 'Lý thuyết'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`room_id`, `room_name`, `capacity`, `room_type`) VALUES
+(1, 'A1-101', 80, 'Lý thuyết'),
+(2, 'A1-102', 80, 'Lý thuyết'),
+(3, 'B2-201', 40, 'Thực hành máy tính'),
+(4, 'B2-202', 40, 'Thực hành máy tính'),
+(5, 'C3-301', 120, 'Hội trường');
 
 -- --------------------------------------------------------
 
@@ -321,6 +372,16 @@ ALTER TABLE `classes`
   ADD KEY `FK_Class_Teacher` (`maGV`);
 
 --
+-- Indexes for table `class_schedules`
+--
+ALTER TABLE `class_schedules`
+  ADD PRIMARY KEY (`schedule_id`),
+  ADD KEY `FK_Schedule_CC` (`maLHP`),
+  ADD KEY `FK_Schedule_Room` (`room_id`),
+  ADD KEY `idx_time_check` (`day_of_week`,`start_period`,`num_periods`),
+  ADD KEY `idx_room_time` (`room_id`,`day_of_week`);
+
+--
 -- Indexes for table `courseclasses`
 --
 ALTER TABLE `courseclasses`
@@ -349,6 +410,13 @@ ALTER TABLE `grades`
   ADD KEY `FK_Grades_CC` (`maLHP`);
 
 --
+-- Indexes for table `rooms`
+--
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`room_id`),
+  ADD UNIQUE KEY `idx_room_name` (`room_name`);
+
+--
 -- Indexes for table `semesters`
 --
 ALTER TABLE `semesters`
@@ -372,10 +440,22 @@ ALTER TABLE `teachers`
 --
 
 --
+-- AUTO_INCREMENT for table `class_schedules`
+--
+ALTER TABLE `class_schedules`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `courseclasses`
 --
 ALTER TABLE `courseclasses`
   MODIFY `maLHP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `rooms`
+--
+ALTER TABLE `rooms`
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -387,6 +467,13 @@ ALTER TABLE `courseclasses`
 ALTER TABLE `classes`
   ADD CONSTRAINT `FK_Class_Faculty` FOREIGN KEY (`maKhoa`) REFERENCES `faculties` (`maKhoa`),
   ADD CONSTRAINT `FK_Class_Teacher` FOREIGN KEY (`maGV`) REFERENCES `teachers` (`maGV`);
+
+--
+-- Constraints for table `class_schedules`
+--
+ALTER TABLE `class_schedules`
+  ADD CONSTRAINT `FK_Schedule_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_Schedule_Room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`);
 
 --
 -- Constraints for table `courseclasses`
