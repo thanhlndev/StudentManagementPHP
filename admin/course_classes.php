@@ -14,9 +14,10 @@ $teachersList = $pdo->query("SELECT maGV, hoTenGV FROM Teachers")->fetchAll();
 
 // --- CẤU HÌNH PHÂN TRANG ---
 $limit = 10;
-$p = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-if ($p < 1) $p = 1;
-$offset = (int)(($p - 1) * $limit);
+$p = isset($_GET['p']) ? (int) $_GET['p'] : 1;
+if ($p < 1)
+    $p = 1;
+$offset = (int) (($p - 1) * $limit);
 
 // Lệnh cơ sở kết nối 3 bảng
 $baseSelect = "SELECT cc.maLHP, cc.maMH, cc.maHK, cc.maGV, 
@@ -76,7 +77,7 @@ $totalPages = ceil($totalRows / $limit);
         <div class="col-xl-8 col-lg-9 px-0">
             <form method="GET" action="index.php" class="mb-0 row no-gutters align-items-center">
                 <input type="hidden" name="page" value="course_classes">
-                
+
                 <div class="col-md-4 pr-md-2 mb-2 mb-md-0">
                     <select name="filter_hk" class="form-control" onchange="this.form.submit()">
                         <option value="">Tất cả học kỳ</option>
@@ -90,7 +91,8 @@ $totalPages = ceil($totalRows / $limit);
 
                 <div class="col-md-8">
                     <div class="input-group w-100">
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm mã lớp, môn học, giảng viên..." value="<?= htmlspecialchars($keyword) ?>">
+                        <input type="text" name="keyword" class="form-control"
+                            placeholder="Tìm mã lớp, môn học, giảng viên..." value="<?= htmlspecialchars($keyword) ?>">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                 <i class="fas fa-search"></i> Tìm
@@ -118,67 +120,79 @@ $totalPages = ceil($totalRows / $limit);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(empty($courseClasses)): ?>
-                        <tr><td colspan="5" class="text-center py-3">Không tìm thấy dữ liệu phù hợp</td></tr>
+                    <?php if (empty($courseClasses)): ?>
+                        <tr>
+                            <td colspan="5" class="text-center py-3">Không tìm thấy dữ liệu phù hợp</td>
+                        </tr>
                     <?php else: ?>
                         <?php foreach ($courseClasses as $cc): ?>
-                        <tr>
-                            <td class="font-weight-bold text-danger text-center">#<?= htmlspecialchars($cc['maLHP']) ?></td>
-                            <td class="font-weight-bold"><?= htmlspecialchars($cc['tenMH'] ?? '[Lỗi/Xóa]') ?></td>
-                            <td><span class="badge badge-success p-2"><?= htmlspecialchars($cc['tenHK'] ?? '[Lỗi/Xóa]') ?></span></td>
-                            <td><?= htmlspecialchars($cc['hoTenGV'] ?? '[Lỗi/Xóa]') ?></td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-warning btn-sm" 
+                            <tr>
+                                <td class="font-weight-bold text-danger text-center">#<?= htmlspecialchars($cc['maLHP']) ?></td>
+                                <td class="font-weight-bold"><?= htmlspecialchars($cc['tenMH'] ?? '[Lỗi/Xóa]') ?></td>
+                                <td><span
+                                        class="badge badge-success p-2"><?= htmlspecialchars($cc['tenHK'] ?? '[Lỗi/Xóa]') ?></span>
+                                </td>
+                                <td><?= htmlspecialchars($cc['hoTenGV'] ?? '[Lỗi/Xóa]') ?></td>
+                                <td class="text-center">
+                                    <a href="index.php?page=course_class_detail&id=<?= htmlspecialchars($cc['maLHP']) ?>"
+                                        class="btn btn-info btn-sm shadow-sm" title="Xếp lịch & Chi tiết">
+                                        <i class="fas fa-calendar-alt"></i> Lịch
+                                    </a>
+                                    <button type="button" class="btn btn-warning btn-sm"
                                         onclick='openEditModal(<?= json_encode($cc, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?>)'>
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="maLHP" value="<?= htmlspecialchars($cc['maLHP']) ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xóa Lớp HP có thể ảnh hưởng tới điểm số SV đã đăng ký. Bạn chắc chắn?')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                </form>
-                            </td>
-                        </tr>
+
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="maLHP" value="<?= htmlspecialchars($cc['maLHP']) ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Xóa Lớp HP có thể ảnh hưởng tới điểm số SV đã đăng ký. Bạn chắc chắn?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        
+
         <?php if ($totalPages > 1): ?>
-        <nav class="mt-4">
-            <ul class="pagination justify-content-end mb-0">
-                <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $p - 1 ?>">Trước</a>
-                </li>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $i ?>"><?= $i ?></a>
+            <nav class="mt-4">
+                <ul class="pagination justify-content-end mb-0">
+                    <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link"
+                            href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $p - 1 ?>">Trước</a>
                     </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $p + 1 ?>">Sau</a>
-                </li>
-            </ul>
-        </nav>
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
+                            <a class="page-link"
+                                href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
+                        <a class="page-link"
+                            href="?page=course_classes&keyword=<?= urlencode($keyword) ?>&filter_hk=<?= urlencode($filter_hk) ?>&p=<?= $p + 1 ?>">Sau</a>
+                    </li>
+                </ul>
+            </nav>
         <?php endif; ?>
 
     </div>
 </div>
 
 <script>
-function openEditModal(data) {
-    // Đổ ID vào ô Text
-    document.getElementById('edit_maLHP').value = data.maLHP;
-    
-    // Javascript tự động tìm thẻ <option> có value tương ứng để gán Selected
-    document.getElementById('edit_maMH').value = data.maMH;
-    document.getElementById('edit_maHK').value = data.maHK;
-    document.getElementById('edit_maGV').value = data.maGV;
-    
-    $('#editModal').modal('show');
-}
+    function openEditModal(data) {
+        // Đổ ID vào ô Text
+        document.getElementById('edit_maLHP').value = data.maLHP;
+
+        // Javascript tự động tìm thẻ <option> có value tương ứng để gán Selected
+        document.getElementById('edit_maMH').value = data.maMH;
+        document.getElementById('edit_maHK').value = data.maHK;
+        document.getElementById('edit_maGV').value = data.maGV;
+
+        $('#editModal').modal('show');
+    }
 </script>

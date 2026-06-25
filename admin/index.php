@@ -13,9 +13,20 @@ require_once 'includes/topbar.php';
 
     // Router: Cấu hình các trang được phép truy cập
     $allowed_pages = [
-        'dashboard', 'faculties', 'courses', 'teachers', 'semesters', 
-        'classes', 'course_classes', 'grades', 'grade_detail', 
-        'students', 'accounts', 'profile'
+        'dashboard',
+        'faculties',
+        'courses',
+        'teachers',
+        'semesters',
+        'classes',
+        'course_classes',
+        'grades',
+        'grade_detail',
+        'students',
+        'accounts',
+        'profile',
+        'rooms',
+        'course_class_detail',
     ];
 
     if (in_array($page, $allowed_pages) && file_exists($page . '.php')) {
