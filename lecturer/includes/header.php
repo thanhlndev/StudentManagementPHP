@@ -12,7 +12,7 @@ if (!defined('BASE_URL')) {
 // ==========================================
 // CHỐT CHẶN BẢO MẬT DÀNH RIÊNG CHO GIẢNG VIÊN
 // ==========================================
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Lecturer') {
     unset($_SESSION['user']);
     header("Location: " . BASE_URL . "auth/login.php");
     exit;
@@ -20,6 +20,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,4 +32,5 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
 
     <link href="<?= BASE_URL ?>css/sb-admin-2.min.css" rel="stylesheet">
 </head>
+
 <body id="page-top">

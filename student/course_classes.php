@@ -116,7 +116,7 @@ $baseSql = "SELECT
 FROM CourseClasses cc
 JOIN Courses c ON cc.maMH = c.maMH
 JOIN Semesters s ON cc.maHK = s.maHK
-JOIN Teachers t ON cc.maGV = t.maGV
+JOIN Lecturers t ON cc.maGV = t.maGV
 
 LEFT JOIN (
     SELECT 

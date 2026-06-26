@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'add') {
-            $stmt = $pdo->prepare("INSERT INTO lecturers (maGV, hoTenGV, email, sdt) VALUES (:id, :hoten, :email, :sdt)");
+            $stmt = $pdo->prepare("INSERT INTO Lecturers (maGV, hoTenGV, email, sdt) VALUES (:id, :hoten, :email, :sdt)");
             $stmt->execute([
                 'id' => $_POST['maGV'],
                 'hoten' => $_POST['hoTenGV'],
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['msg'] = "Thêm giảng viên thành công!";
             $_SESSION['msg_type'] = "success";
         } elseif ($action === 'edit') {
-            $sql = "UPDATE lecturers SET hoTenGV=:hoten, email=:email, sdt=:sdt WHERE maGV=:id";
+            $sql = "UPDATE Lecturers SET hoTenGV=:hoten, email=:email, sdt=:sdt WHERE maGV=:id";
             $stmt = $pdo->prepare($sql);
 
             $stmt->execute([
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['msg'] = "Cập nhật thông tin giảng viên thành công!";
             $_SESSION['msg_type'] = "success";
         } elseif ($action === 'delete') {
-            $stmt = $pdo->prepare("DELETE FROM lecturers WHERE maGV = ?");
+            $stmt = $pdo->prepare("DELETE FROM Lecturers WHERE maGV = ?");
             $stmt->execute([$_POST['maGV']]);
             $_SESSION['msg'] = "Xóa giảng viên thành công!";
             $_SESSION['msg_type'] = "success";
@@ -48,12 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ==========================================
 // 2. TRUY VẤN DỮ LIỆU HIỂN THỊ (TÌM KIẾM & PHÂN TRANG PHP)
 // ==========================================
-$keyword = $_GET['keyword'] ?? '';
+$keyword = trim($_GET['keyword'] ?? '');
 
-// --- CẤU HÌNH PHÂN TRANG ---
-$limit = 5; // Số dòng trên 1 trang
-
-// SỬA LỖI Ở ĐÂY: Dùng biến 'p' thay vì 'page' để tránh xung đột với Router
+// --- CẤU HÌNH PHÂN TRANG (Dùng biến $p, tuyệt đối không dùng $page) ---
+$limit = 5;
 $p = isset($_GET['p']) ? (int) $_GET['p'] : 1;
 if ($p < 1)
     $p = 1;
@@ -61,21 +59,22 @@ $offset = ($p - 1) * $limit;
 
 if ($keyword !== '') {
     $searchTerm = "%$keyword%";
-    //Đếm tổng số dòng vẽ số trang
-    $countSql = "SELECT COUNT(*) FROM lecturers WHERE maGV LIKE ? OR hoTenGV LIKE ? OR email LIKE ?";
+    // Đếm tổng số dòng
+    $countSql = "SELECT COUNT(*) FROM Lecturers WHERE maGV LIKE ? OR hoTenGV LIKE ? OR email LIKE ?";
     $countStmt = $pdo->prepare($countSql);
     $countStmt->execute([$searchTerm, $searchTerm, $searchTerm]);
-    $totalRows = $countStmt->fetchColumn();
+    $totalRows = (int) $countStmt->fetchColumn();
 
-    // Lấy dữ liệu dùng  LIMIT và OFFSET
-    $sql = "SELECT * FROM lecturers WHERE maGV LIKE ? OR hoTenGV LIKE ? OR email LIKE ? LIMIT $limit OFFSET $offset";
+    // Lấy dữ liệu
+    $sql = "SELECT * FROM Lecturers WHERE maGV LIKE ? OR hoTenGV LIKE ? OR email LIKE ? LIMIT $limit OFFSET $offset";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
-
 } else {
-    $totalRows = $pdo->query("SELECT COUNT(*) FROM lecturers")->fetchColumn();
+    // Đếm tổng số dòng khi không tìm kiếm
+    $totalRows = (int) $pdo->query("SELECT COUNT(*) FROM Lecturers")->fetchColumn();
 
-    $sql = "SELECT * FROM lecturers LIMIT $limit OFFSET $offset";
+    // Lấy dữ liệu
+    $sql = "SELECT * FROM Lecturers LIMIT $limit OFFSET $offset";
     $stmt = $pdo->query($sql);
 }
 
@@ -110,8 +109,7 @@ $totalPages = ceil($totalRows / $limit);
             <form method="GET" action="index.php" class="mb-0">
                 <input type="hidden" name="page" value="lecturers">
                 <div class="input-group w-100">
-                    <input type="text" name="keyword" class="form-control"
-                        placeholder="Nhập mã, tên Giảng viên hoặc email để tìm kiếm..."
+                    <input type="text" name="keyword" class="form-control" placeholder="Nhập mã, tên..."
                         value="<?= htmlspecialchars($keyword) ?>">
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="submit">
@@ -170,28 +168,37 @@ $totalPages = ceil($totalRows / $limit);
                 </tbody>
             </table>
         </div>
-        <?php if ($totalPages > 1): ?>
-            <nav class="mt-4">
-                <ul class="pagination justify-content-end mb-0">
-                    <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
-                        <a class="page-link"
-                            href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $p - 1 ?>">Trước</a>
-                    </li>
 
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="text-muted text-sm font-weight-bold">
+                Hiển thị <?= count($Lecturers) ?> / Tổng số <?= $totalRows ?> giảng viên (Trang
+                <?= $p ?>/<?= $totalPages == 0 ? 1 : $totalPages ?>)
+            </div>
+
+            <?php if ($totalPages > 0): ?>
+                <nav>
+                    <ul class="pagination mb-0">
+                        <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
                             <a class="page-link"
-                                href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $i ?>"><?= $i ?></a>
+                                href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $p - 1 ?>">Trước</a>
                         </li>
-                    <?php endfor; ?>
 
-                    <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
-                        <a class="page-link"
-                            href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $p + 1 ?>">Sau</a>
-                    </li>
-                </ul>
-            </nav>
-        <?php endif; ?>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
+                                <a class="page-link"
+                                    href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
+                            <a class="page-link"
+                                href="index.php?page=lecturers&keyword=<?= urlencode($keyword) ?>&p=<?= $p + 1 ?>">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            <?php endif; ?>
+        </div>
+
     </div>
 </div>
 

@@ -33,7 +33,12 @@
             <span>Kết quả Học tập</span>
         </a>
     </li>
-
+    <li class="nav-item <?= ($page == 'timetable') ? 'active' : '' ?>">
+        <a class="nav-link" href="index.php?page=timetable">
+            <i class="fas fa-fw fa-calendar"></i>
+            <span>Lịch học cá nhân</span>
+        </a>
+    </li>
     <hr class="sidebar-divider">
     <div class="sidebar-heading">Cá nhân</div>
 

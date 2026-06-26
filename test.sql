@@ -9,7 +9,7 @@ CREATE TABLE Accounts (
     password VARCHAR(255) NULL,
     -- Mật khẩu đã mã hóa (hashed)
     role VARCHAR(20) NOT NULL,
-    -- 'Student', 'Teacher', 'Admin'
+    -- 'Student', 'Lecturer', 'Admin'
     isActive BOOLEAN DEFAULT 1,
     -- Trạng thái khóa/mở tài khoản
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -31,70 +31,70 @@ VALUES (
     (
         'gv01',
         '$2y$10$wOUI.EqI8corfdduw7XLk.M3NWMqYUzrrMTQcKmCGFi4ZdzKEHYUO',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 14:43:33'
     ),
     (
         'gv02',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv03',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv04',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv05',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv06',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv07',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv08',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv09',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
     (
         'gv10',
         '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
-        'Teacher',
+        'lecturer',
         1,
         '2026-06-24 16:24:05'
     ),
@@ -248,15 +248,15 @@ VALUES (
         'qlcc@university.edu.vn',
         '0243111111'
     );
--- 3. Bảng Teachers (Phải tạo trước bảng Classes và CourseClasses)
-CREATE TABLE Teachers (
+-- 3. Bảng Lecturers (Phải tạo trước bảng Classes và CourseClasses)
+CREATE TABLE Lecturers (
     maGV VARCHAR(20) PRIMARY KEY,
     hoTenGV VARCHAR(100) NOT NULL,
     email VARCHAR(100),
     sdt VARCHAR(20)
 );
--- 3. Chèn 10 dòng vào Teachers
-INSERT INTO Teachers (maGV, hoTenGV, email, sdt)
+-- 3. Chèn 10 dòng vào Lecturers
+INSERT INTO Lecturers (maGV, hoTenGV, email, sdt)
 VALUES (
         'gv01',
         'Nguyễn Văn A',
@@ -326,7 +326,7 @@ CREATE TABLE Classes (
     maKhoa VARCHAR(20) NOT NULL,
     maGV VARCHAR(20) NOT NULL,
     CONSTRAINT FK_Class_Faculty FOREIGN KEY (maKhoa) REFERENCES Faculties(maKhoa),
-    CONSTRAINT FK_Class_Teacher FOREIGN KEY (maGV) REFERENCES Teachers(maGV)
+    CONSTRAINT FK_Class_lecturer FOREIGN KEY (maGV) REFERENCES Lecturers(maGV)
 );
 -- 5. Bảng Students
 CREATE TABLE Students (
@@ -391,7 +391,7 @@ CREATE TABLE CourseClasses (
     isLocked TINYINT(1) DEFAULT 0,
     CONSTRAINT FK_CC_Course FOREIGN KEY (maMH) REFERENCES Courses(maMH),
     CONSTRAINT FK_CC_Semester FOREIGN KEY (maHK) REFERENCES Semesters(maHK),
-    CONSTRAINT FK_CC_Teacher FOREIGN KEY (maGV) REFERENCES Teachers(maGV)
+    CONSTRAINT FK_CC_lecturer FOREIGN KEY (maGV) REFERENCES Lecturers(maGV)
 );
 -- 8. Chèn 10 dòng vào CourseClasses (maLHP tự tăng từ 1 đến 10)
 INSERT INTO CourseClasses (maMH, maHK, maGV)
@@ -708,7 +708,7 @@ VALUES ('sv01', 1, 9.50, 9.50, 9.50),
 -- ==============================================================================
 -- 2. THÊM GIÁO VIÊN KHOA LUẬT
 -- ==============================================================================
-INSERT INTO `teachers` (`maGV`, `hoTenGV`, `email`, `sdt`)
+INSERT INTO `Lecturers` (`maGV`, `hoTenGV`, `email`, `sdt`)
 VALUES (
         'gv11',
         'TS. Nguyễn Luật Sư',

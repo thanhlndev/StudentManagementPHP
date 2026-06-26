@@ -2,7 +2,7 @@
 /** @var PDO $pdo */
 
 // 1. NHẬN DIỆN MỤC TIÊU CẦN XEM
-$roleView = $_GET['role'] ?? 'Teacher';
+$roleView = $_GET['role'] ?? 'Lecturer';
 $idView = $_GET['id'] ?? $_SESSION['user']['username'];
 $profileData = [];
 
@@ -24,10 +24,10 @@ if ($roleView === 'Student') {
 } else {
     // B. Lấy thông tin Giảng viên
     // CHỐT CHẶN BẢO MẬT: Ép buộc idView phải là mã của CHÍNH GIẢNG VIÊN ĐÓ, chống xem trộm đồng nghiệp
-    $idView = $_SESSION['user']['username']; 
-    $roleView = 'Teacher'; 
+    $idView = $_SESSION['user']['username'];
+    $roleView = 'Lecturer';
 
-    $sql = "SELECT * FROM Teachers WHERE maGV = ?";
+    $sql = "SELECT * FROM lecturers WHERE maGV = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$idView]);
     $profileData = $stmt->fetch();
@@ -47,14 +47,14 @@ if ($roleView === 'Student') {
     <div class="col-xl-4 col-lg-5">
         <div class="card shadow mb-4 border-bottom-<?= ($roleView === 'Student') ? 'primary' : 'success' ?>">
             <div class="card-body text-center pt-5 pb-4">
-                <img class="img-profile rounded-circle border shadow-sm mb-3" 
-                     src="<?= BASE_URL ?>img/undraw_profile<?= ($roleView === 'Student') ? '_2' : '' ?>.svg" 
-                     alt="Avatar" width="130" height="130">
-                
+                <img class="img-profile rounded-circle border shadow-sm mb-3"
+                    src="<?= BASE_URL ?>img/undraw_profile<?= ($roleView === 'Student') ? '_2' : '' ?>.svg" alt="Avatar"
+                    width="130" height="130">
+
                 <h4 class="font-weight-bold text-dark mb-1">
                     <?= htmlspecialchars($profileData[($roleView === 'Student') ? 'hoTen' : 'hoTenGV']) ?>
                 </h4>
-                
+
                 <div class="mb-3">
                     <?php if ($roleView === 'Student'): ?>
                         <span class="badge badge-primary px-3 py-2">Sinh viên</span>
@@ -62,7 +62,7 @@ if ($roleView === 'Student') {
                         <span class="badge badge-success px-3 py-2">Giảng viên</span>
                     <?php endif; ?>
                 </div>
-                
+
                 <div class="text-muted font-weight-bold">
                     Mã số: <?= htmlspecialchars($idView) ?>
                 </div>
@@ -83,7 +83,9 @@ if ($roleView === 'Student') {
                         <?php if ($roleView === 'Student'): ?>
                             <tr>
                                 <th width="30%" class="text-gray-800">Lớp sinh hoạt:</th>
-                                <td><span class="badge badge-info p-2" style="font-size: 14px;"><?= htmlspecialchars($profileData['tenLop'] ?? 'Chưa phân lớp') ?></span></td>
+                                <td><span class="badge badge-info p-2"
+                                        style="font-size: 14px;"><?= htmlspecialchars($profileData['tenLop'] ?? 'Chưa phân lớp') ?></span>
+                                </td>
                             </tr>
                             <tr>
                                 <th class="text-gray-800">Giới tính:</th>
@@ -102,9 +104,11 @@ if ($roleView === 'Student') {
                         <tr>
                             <th width="30%" class="text-gray-800">Email:</th>
                             <td>
-                                <?php if(!empty($profileData['email'])): ?>
-                                    <a href="mailto:<?= htmlspecialchars($profileData['email']) ?>" class="text-decoration-none">
-                                        <i class="fas fa-envelope mr-1 text-danger"></i> <?= htmlspecialchars($profileData['email']) ?>
+                                <?php if (!empty($profileData['email'])): ?>
+                                    <a href="mailto:<?= htmlspecialchars($profileData['email']) ?>"
+                                        class="text-decoration-none">
+                                        <i class="fas fa-envelope mr-1 text-danger"></i>
+                                        <?= htmlspecialchars($profileData['email']) ?>
                                     </a>
                                 <?php else: ?>
                                     <span class="text-muted">Chưa cập nhật</span>
@@ -114,8 +118,9 @@ if ($roleView === 'Student') {
                         <tr>
                             <th class="text-gray-800">Số điện thoại:</th>
                             <td>
-                                <?php if(!empty($profileData['sdt'])): ?>
-                                    <i class="fas fa-phone mr-1 text-success"></i> <?= htmlspecialchars($profileData['sdt']) ?>
+                                <?php if (!empty($profileData['sdt'])): ?>
+                                    <i class="fas fa-phone mr-1 text-success"></i>
+                                    <?= htmlspecialchars($profileData['sdt']) ?>
                                 <?php else: ?>
                                     <span class="text-muted">Chưa cập nhật</span>
                                 <?php endif; ?>

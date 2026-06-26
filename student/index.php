@@ -5,11 +5,12 @@ require_once 'includes/header.php';
 
 <div id="wrapper">
     <?php require_once 'includes/sidebar.php'; ?>
-    <?php require_once 'includes/topbar.php'; ?> <div class="container-fluid">
+    <?php require_once 'includes/topbar.php'; ?>
+    <div class="container-fluid">
         <?php
         try {
             $page = $_GET['page'] ?? 'dashboard';
-            $allowed_pages = ['dashboard', 'course_classes', 'class_detail', 'grades', 'profile'];
+            $allowed_pages = ['dashboard', 'course_classes', 'class_detail', 'grades', 'timetable', 'profile'];
 
             if (in_array($page, $allowed_pages) && file_exists($page . '.php')) {
                 require_once $page . '.php';

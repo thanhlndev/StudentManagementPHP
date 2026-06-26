@@ -16,7 +16,7 @@ require_once 'includes/topbar.php';
         'dashboard',
         'faculties',
         'courses',
-        'teachers',
+        'lecturers',
         'semesters',
         'classes',
         'course_classes',

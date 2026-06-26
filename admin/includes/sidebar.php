@@ -25,8 +25,8 @@
     </li>
     <li class="nav-item <?= ($page == 'grades') ? 'active' : '' ?>"><a class="nav-link" href="index.php?page=grades"><i
                 class="fas fa-fw fa-list-ol"></i><span>Bảng điểm lớp</span></a></li>
-    <li class="nav-item <?= ($page == 'teachers') ? 'active' : '' ?>"><a class="nav-link"
-            href="index.php?page=teachers"><i class="fas fa-fw fa-chalkboard-teacher"></i><span>Giảng viên</span></a>
+    <li class="nav-item <?= ($page == 'lecturers') ? 'active' : '' ?>"><a class="nav-link"
+            href="index.php?page=lecturers"><i class="fas fa-fw fa-chalkboard-teacher"></i><span>Giảng viên</span></a>
     </li>
     <li class="nav-item <?= ($page == 'semesters') ? 'active' : '' ?>"><a class="nav-link"
             href="index.php?page=semesters"><i class="fas fa-calendar-alt"></i><span>Học kỳ</span></a></li>

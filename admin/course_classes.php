@@ -1,65 +1,123 @@
 <?php
 /** @var PDO $pdo */
+// ==========================================
+// 0. XỬ LÝ LOGIC POST (SỬA / XÓA LỚP HỌC PHẦN)
+// ==========================================
+$message = '';
+$messageType = ''; // 'success' hoặc 'danger'
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
+
+    try {
+        if ($action === 'edit') {
+            // Nhận và kiểm tra dữ liệu
+            $maLHP_edit = $_POST['maLHP'] ?? '';
+            $maMH_edit = $_POST['maMH'] ?? '';
+            $maHK_edit = $_POST['maHK'] ?? '';
+            $maGV_edit = $_POST['maGV'] ?? '';
+
+            if (empty($maLHP_edit) || empty($maMH_edit) || empty($maHK_edit) || empty($maGV_edit)) {
+                throw new Exception("Vui lòng điền đầy đủ thông tin để cập nhật.");
+            }
+
+            // Thực thi truy vấn an toàn bằng PDO Prepared Statement
+            $sql_update = "UPDATE CourseClasses 
+                           SET maMH = :maMH, maHK = :maHK, maGV = :maGV 
+                           WHERE maLHP = :maLHP";
+            $stmt_update = $pdo->prepare($sql_update);
+            $stmt_update->execute([
+                ':maMH' => $maMH_edit,
+                ':maHK' => $maHK_edit,
+                ':maGV' => $maGV_edit,
+                ':maLHP' => $maLHP_edit
+            ]);
+
+            $message = "Cập nhật thành công Lớp học phần #$maLHP_edit.";
+            $messageType = "success";
+
+        } elseif ($action === 'delete') {
+            $maLHP_del = $_POST['maLHP'] ?? '';
+            if (empty($maLHP_del)) {
+                throw new Exception("Mã Lớp học phần không hợp lệ.");
+            }
+
+            // Thực thi xóa
+            $sql_delete = "DELETE FROM CourseClasses WHERE maLHP = :maLHP";
+            $stmt_delete = $pdo->prepare($sql_delete);
+            $stmt_delete->execute([':maLHP' => $maLHP_del]);
+
+            $message = "Đã xóa Lớp học phần #$maLHP_del thành công.";
+            $messageType = "success";
+        }
+    } catch (PDOException $e) {
+        // Bắt lỗi từ Database (Rất quan trọng)
+        if ($e->getCode() == 23000) {
+            // Lỗi 23000 là vi phạm khóa ngoại (Integrity constraint violation)
+            $message = "Thao tác thất bại: Lớp học phần này đang chứa dữ liệu liên kết (đã xếp lịch hoặc đã có sinh viên đăng ký). Vui lòng xóa dữ liệu liên kết trước.";
+        } else {
+            $message = "Lỗi hệ thống CSDL: " . $e->getMessage();
+        }
+        $messageType = "danger";
+    } catch (Exception $e) {
+        // Bắt lỗi nghiệp vụ chung
+        $message = $e->getMessage();
+        $messageType = "danger";
+    }
+}
+// ==========================================
+// 1. TRUY VẤN DỮ LIỆU ĐỔ VÀO SELECT
+// ==========================================
+$coursesList = $pdo->query("SELECT maMH, tenMH FROM Courses")->fetchAll();
+$semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters")->fetchAll();
+$LecturersList = $pdo->query("SELECT maGV, hoTenGV FROM lecturers")->fetchAll();
 
 // ==========================================
-// 2. TRUY VẤN DỮ LIỆU HIỂN THỊ (TÌM KIẾM, LỌC HỌC KỲ & PHÂN TRANG PHP)
+// 2. CẤU HÌNH PHÂN TRANG
 // ==========================================
 $keyword = $_GET['keyword'] ?? '';
 $filter_hk = $_GET['filter_hk'] ?? '';
-
-// --- FETCH PRE-DATA CHO CÁC THẺ <SELECT> ---
-$coursesList = $pdo->query("SELECT maMH, tenMH FROM Courses")->fetchAll();
-$semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters")->fetchAll();
-$teachersList = $pdo->query("SELECT maGV, hoTenGV FROM Teachers")->fetchAll();
-
-// --- CẤU HÌNH PHÂN TRANG ---
 $limit = 10;
 $p = isset($_GET['p']) ? (int) $_GET['p'] : 1;
 if ($p < 1)
     $p = 1;
 $offset = (int) (($p - 1) * $limit);
 
-// Lệnh cơ sở kết nối 3 bảng
+// Lệnh cơ sở 
 $baseSelect = "SELECT cc.maLHP, cc.maMH, cc.maHK, cc.maGV, 
                       c.tenMH, s.tenHK, t.hoTenGV 
                FROM CourseClasses cc
                LEFT JOIN Courses c ON cc.maMH = c.maMH
                LEFT JOIN Semesters s ON cc.maHK = s.maHK
-               LEFT JOIN Teachers t ON cc.maGV = t.maGV";
+               LEFT JOIN lecturers t ON cc.maGV = t.maGV";
 
-// Xây dựng điều kiện WHERE động dựa trên việc có lọc học kỳ hay không
+// Xây dựng điều kiện WHERE động
 $whereClauses = [];
 $params = [];
 
-// 1. Nếu có từ khóa tìm kiếm
 if ($keyword !== '') {
     $searchTerm = "%$keyword%";
     $whereClauses[] = "(cc.maLHP LIKE ? OR c.tenMH LIKE ? OR s.tenHK LIKE ? OR t.hoTenGV LIKE ?)";
     array_push($params, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
 }
 
-// 2. Nếu có chọn học kỳ cụ thể (khác rỗng '')
 if ($filter_hk !== '') {
     $whereClauses[] = "cc.maHK = ?";
     array_push($params, $filter_hk);
 }
 
-// Gộp các điều kiện lại bằng từ khóa AND
-$whereString = "";
-if (count($whereClauses) > 0) {
-    $whereString = " WHERE " . implode(" AND ", $whereClauses);
-}
+$whereString = count($whereClauses) > 0 ? " WHERE " . implode(" AND ", $whereClauses) : "";
 
-// BƯỚC A: Đếm tổng số dòng thỏa mãn bộ lọc để phân trang
+// BƯỚC A: Đếm tổng số dòng
 $countSql = "SELECT COUNT(*) FROM CourseClasses cc
              LEFT JOIN Courses c ON cc.maMH = c.maMH
              LEFT JOIN Semesters s ON cc.maHK = s.maHK
-             LEFT JOIN Teachers t ON cc.maGV = t.maGV" . $whereString;
+             LEFT JOIN lecturers t ON cc.maGV = t.maGV" . $whereString;
 $countStmt = $pdo->prepare($countSql);
 $countStmt->execute($params);
 $totalRows = $countStmt->fetchColumn();
 
-// BƯỚC B: Lấy dữ liệu phân trang thực tế
+// BƯỚC B: Lấy dữ liệu
 $sql = $baseSelect . $whereString . " ORDER BY cc.maLHP DESC LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -67,8 +125,15 @@ $courseClasses = $stmt->fetchAll();
 
 $totalPages = ceil($totalRows / $limit);
 ?>
-
-
+<?php if (!empty($message)): ?>
+    <div class="alert alert-<?= $messageType ?> alert-dismissible fade show shadow-sm" role="alert">
+        <strong><?= $messageType === 'success' ? '<i class="fas fa-check-circle"></i> Thành công!' : '<i class="fas fa-exclamation-triangle"></i> Lỗi!' ?></strong>
+        <?= htmlspecialchars($message) ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
 <div class="card shadow mb-4">
     <div class="card-header py-3 row align-items-center m-0">
         <div class="col-xl-4 col-lg-3 mt-2 px-0">
@@ -179,20 +244,92 @@ $totalPages = ceil($totalRows / $limit);
                 </ul>
             </nav>
         <?php endif; ?>
+    </div>
+</div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="POST" class="modal-content" action="">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold">Sửa Lớp Học Phần</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="action" value="edit">
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Mã LHP</label>
+                    <input type="text" id="edit_maLHP" name="maLHP" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Môn học</label>
+                    <select id="edit_maMH" name="maMH" class="form-control" required>
+                        <?php foreach ($coursesList as $c): ?>
+                            <option value="<?= htmlspecialchars($c['maMH']) ?>"><?= htmlspecialchars($c['tenMH']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Học kỳ</label>
+                    <select id="edit_maHK" name="maHK" class="form-control" required>
+                        <?php foreach ($semestersList as $s): ?>
+                            <option value="<?= htmlspecialchars($s['maHK']) ?>"><?= htmlspecialchars($s['tenHK']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Giảng viên phụ trách</label>
+                    <select id="edit_maGV" name="maGV" class="form-control" required>
+                        <?php foreach ($LecturersList as $l): ?>
+                            <option value="<?= htmlspecialchars($l['maGV']) ?>"><?= htmlspecialchars($l['hoTenGV']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-    function openEditModal(data) {
-        // Đổ ID vào ô Text
-        document.getElementById('edit_maLHP').value = data.maLHP;
+    // Định nghĩa biến ở phạm vi window để button có thể gọi được
+    window.openEditModal = function (data) {
+        console.log("Dữ liệu nhận được:", data);
 
-        // Javascript tự động tìm thẻ <option> có value tương ứng để gán Selected
-        document.getElementById('edit_maMH').value = data.maMH;
-        document.getElementById('edit_maHK').value = data.maHK;
-        document.getElementById('edit_maGV').value = data.maGV;
+        // Map các ID trên HTML với các key dữ liệu
+        const fieldMapping = {
+            'edit_maLHP': data.maLHP,
+            'edit_maMH': data.maMH,
+            'edit_maHK': data.maHK,
+            'edit_maGV': data.maGV
+        };
 
-        $('#editModal').modal('show');
-    }
+        // Lặp qua object để gán giá trị an toàn
+        for (const [id, value] of Object.entries(fieldMapping)) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = value;
+            } else {
+                console.error("Lỗi: Không tìm thấy ID HTML ->", id);
+            }
+        }
+
+        // Kiểm tra xem jQuery đã sẵn sàng chưa rồi hiển thị Modal
+        if (typeof $ !== 'undefined') {
+            $('#editModal').modal('show');
+        } else {
+            alert("Đã xảy ra lỗi: Thư viện giao diện chưa được tải xong.");
+        }
+    };
 </script>
