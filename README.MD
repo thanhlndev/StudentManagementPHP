@@ -13,7 +13,7 @@ Hệ thống Quản lý Đào tạo Tín chỉ được thiết kế nhằm tố
 
 Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoại (Foreign Keys) để đảm bảo tính toàn vẹn dữ liệu:
 
-- **Module Nhân sự & Đơn vị:** Accounts, Faculties, Teachers, Classes, Students.
+- **Module Nhân sự & Đơn vị:** Accounts, Faculties, Lectures, Classes, Students.
 
 - **Module Đào tạo:** Courses, Semesters, CourseClasses.
 
@@ -25,9 +25,9 @@ Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoạ
 
 1. **Admin:** Quản trị dữ liệu tập trung, phân tích Dashboard, quản lý phòng học và lịch học (xếp lịch theo tài nguyên).
 
-2. **Teacher:** Quản lý lớp học phần được phân công, nhập điểm và theo dõi trạng thái khóa/mở điểm.
+2. **Lecturer(Giảng viên):** Quản lý lớp học phần được phân công, nhập điểm và theo dõi trạng thái khóa/mở điểm.
 
-3. **Student:** Đăng ký học phần, xem kết quả học tập, tính toán GPA và theo dõi thời khóa biểu cá nhân với bộ lọc trùng lịch thông minh.
+3. **Student(Sinh viên):** Đăng ký học phần, xem kết quả học tập, tính toán GPA và theo dõi thời khóa biểu cá nhân với bộ lọc trùng lịch thông minh.
 
 ## Thiết lập môi trường
 
