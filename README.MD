@@ -33,7 +33,7 @@ Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoạ
 
 1. Yêu cầu **XAMPP** (hoặc môi trường LAMP/WAMP tương tự).
 2. gỉt clone https://github.com/thanhlndev/StudentManagementPHP.git
-   hoặc Dowload Zip trong thư mục xampp/htdocs/
+   hoặc Download Zip, giải nén trong thư mục xampp/htdocs/
 3. Import file `qlsv.sql` vào MySQL.
 4. Cấu hình `config/database.php` với thông tin kết nối DB của bạn.
 5. Truy cập hệ thống qua: `http://localhost/StudentManagement/`
