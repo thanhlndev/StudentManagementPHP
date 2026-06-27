@@ -37,16 +37,15 @@ if ($role === 'Student') {
     $profileData = $stmt->fetch();
 
 } elseif ($role === 'Teacher') {
-    $sql = "SELECT * FROM Teachers WHERE maGV = ?";
+    $sql = "SELECT * FROM Lecturers WHERE maGV = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$username]);
     $profileData = $stmt->fetch();
 }
 /**
  *  kiểm tra tí =)))))))
- */
-elseif ($role === 'Admin') {
-    $sql = "SELECT * FROM Teachers WHERE maGV = ?";
+ */ elseif ($role === 'Admin') {
+    $sql = "SELECT * FROM Lecturers WHERE maGV = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$username]);
     $profileData = $stmt->fetch();
@@ -68,11 +67,11 @@ elseif ($role === 'Admin') {
                 <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-user-circle"></i> Thẻ Tài Khoản</h6>
             </div>
             <div class="card-body text-center pt-5 pb-5">
-                <img class="img-profile rounded-circle border shadow-sm mb-3" 
-                     src="../img/undraw_profile.svg" alt="Avatar" width="120" height="120">
-                
+                <img class="img-profile rounded-circle border shadow-sm mb-3" src="../img/undraw_profile.svg"
+                    alt="Avatar" width="120" height="120">
+
                 <h4 class="font-weight-bold text-dark mb-1"><?= htmlspecialchars($account['username']) ?></h4>
-                
+
                 <div class="mb-3">
                     <?php if ($role === 'Admin'): ?>
                         <span class="badge badge-danger px-3 py-2">Quản trị viên</span>
@@ -86,8 +85,9 @@ elseif ($role === 'Admin') {
                 <ul class="list-group list-group-flush text-left mt-4 border-top pt-3">
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                         <span class="font-weight-bold text-gray-700">Trạng thái:</span>
-                        <?php if ((int)$account['isActive'] === 1): ?>
-                            <span class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> Đang hoạt động</span>
+                        <?php if ((int) $account['isActive'] === 1): ?>
+                            <span class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> Đang hoạt
+                                động</span>
                         <?php else: ?>
                             <span class="text-danger font-weight-bold"><i class="fas fa-ban"></i> Đã khóa</span>
                         <?php endif; ?>
@@ -113,13 +113,15 @@ elseif ($role === 'Admin') {
                         <!-- <h5>Đây là tài khoản Quản trị viên cấp cao.</h5>
                         <p class="mb-0">Tài khoản này có toàn quyền vận hành hệ thống và không bị ràng buộc vào hồ sơ cá nhân.</p> -->
                         <?php if (!$profileData): ?>
-                        <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Giảng viên nào trong CSDL!</div>
+                            <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Giảng viên nào trong
+                                CSDL!</div>
                         <?php else: ?>
                             <table class="table table-borderless table-striped">
                                 <tbody>
                                     <tr>
                                         <th width="30%" class="text-gray-800">Họ và Tên:</th>
-                                        <td class="font-weight-bold text-primary text-uppercase"><?= htmlspecialchars($profileData['hoTenGV']) ?></td>
+                                        <td class="font-weight-bold text-primary text-uppercase">
+                                            <?= htmlspecialchars($profileData['hoTenGV']) ?></td>
                                     </tr>
                                     <tr>
                                         <th class="text-gray-800">Mã Giảng viên:</th>
@@ -127,7 +129,9 @@ elseif ($role === 'Admin') {
                                     </tr>
                                     <tr>
                                         <th class="text-gray-800">Email liên hệ:</th>
-                                        <td><a href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a></td>
+                                        <td><a
+                                                href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th class="text-gray-800">Số điện thoại:</th>
@@ -136,17 +140,19 @@ elseif ($role === 'Admin') {
                                 </tbody>
                             </table>
                         <?php endif; ?>
-                        </div>
+                    </div>
 
                 <?php elseif ($role === 'Teacher'): ?>
                     <?php if (!$profileData): ?>
-                        <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Giảng viên nào trong CSDL!</div>
+                        <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Giảng viên nào trong CSDL!
+                        </div>
                     <?php else: ?>
                         <table class="table table-borderless table-striped">
                             <tbody>
                                 <tr>
                                     <th width="30%" class="text-gray-800">Họ và Tên:</th>
-                                    <td class="font-weight-bold text-primary text-uppercase"><?= htmlspecialchars($profileData['hoTenGV']) ?></td>
+                                    <td class="font-weight-bold text-primary text-uppercase">
+                                        <?= htmlspecialchars($profileData['hoTenGV']) ?></td>
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Mã Giảng viên:</th>
@@ -154,7 +160,9 @@ elseif ($role === 'Admin') {
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Email liên hệ:</th>
-                                    <td><a href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a></td>
+                                    <td><a
+                                            href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Số điện thoại:</th>
@@ -166,20 +174,22 @@ elseif ($role === 'Admin') {
 
                 <?php elseif ($role === 'Student'): ?>
                     <?php if (!$profileData): ?>
-                        <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Sinh viên nào trong CSDL!</div>
+                        <div class="alert alert-warning">Tài khoản này chưa được liên kết với hồ sơ Sinh viên nào trong CSDL!
+                        </div>
                     <?php else: ?>
                         <table class="table table-borderless table-striped">
                             <tbody>
                                 <tr>
                                     <th width="30%" class="text-gray-800">Họ và Tên:</th>
-                                    <td class="font-weight-bold text-success text-uppercase"><?= htmlspecialchars($profileData['hoTen']) ?></td>
+                                    <td class="font-weight-bold text-success text-uppercase">
+                                        <?= htmlspecialchars($profileData['hoTen']) ?></td>
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Mã Sinh viên:</th>
                                     <td><?= htmlspecialchars($profileData['maSV']) ?></td>
                                 </tr>
                                 <tr>
-                                    <th class="text-gray-800">Lớp sinh hoạt:</th>
+                                    <th class="text-gray-800">Lớp hành chính:</th>
                                     <td>
                                         <span class="badge badge-info p-2 font-weight-bold text-md">
                                             <?= htmlspecialchars($profileData['tenLop'] ?? 'Chưa phân lớp') ?>
@@ -196,7 +206,9 @@ elseif ($role === 'Admin') {
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Email:</th>
-                                    <td><a href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a></td>
+                                    <td><a
+                                            href="mailto:<?= htmlspecialchars($profileData['email']) ?>"><?= htmlspecialchars($profileData['email'] ?? 'Chưa cập nhật') ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th class="text-gray-800">Số điện thoại:</th>

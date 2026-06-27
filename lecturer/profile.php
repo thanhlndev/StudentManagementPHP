@@ -82,7 +82,7 @@ if ($roleView === 'Student') {
                     <tbody>
                         <?php if ($roleView === 'Student'): ?>
                             <tr>
-                                <th width="30%" class="text-gray-800">Lớp sinh hoạt:</th>
+                                <th width="30%" class="text-gray-800">Lớp hành chính:</th>
                                 <td><span class="badge badge-info p-2"
                                         style="font-size: 14px;"><?= htmlspecialchars($profileData['tenLop'] ?? 'Chưa phân lớp') ?></span>
                                 </td>

@@ -4,7 +4,7 @@
 // CHỐT CHẶN BẢO MẬT: Luôn luôn lấy mã SV từ phiên đăng nhập hiện tại
 $maSV = $_SESSION['user']['username'];
 
-// Truy vấn thông tin Sinh viên kèm thông tin Lớp sinh hoạt
+// Truy vấn thông tin Sinh viên kèm thông tin Lớp hành chính
 $sql = "SELECT s.*, c.tenLop, f.tenKhoa 
         FROM Students s
         LEFT JOIN Classes c ON s.maLop = c.maLop
@@ -28,18 +28,17 @@ if (!$profileData) {
     <div class="col-xl-4 col-lg-5">
         <div class="card shadow mb-4 border-bottom-info">
             <div class="card-body text-center pt-5 pb-4">
-                <img class="img-profile rounded-circle border shadow-sm mb-3" 
-                     src="<?= BASE_URL ?>img/undraw_profile_2.svg" 
-                     alt="Avatar" width="130" height="130">
-                
+                <img class="img-profile rounded-circle border shadow-sm mb-3"
+                    src="<?= BASE_URL ?>img/undraw_profile_2.svg" alt="Avatar" width="130" height="130">
+
                 <h4 class="font-weight-bold text-dark mb-1">
                     <?= htmlspecialchars($profileData['hoTen']) ?>
                 </h4>
-                
+
                 <div class="mb-3">
                     <span class="badge badge-info px-3 py-2 text-uppercase">Sinh viên</span>
                 </div>
-                
+
                 <div class="text-muted font-weight-bold mb-2">
                     Mã số: <?= htmlspecialchars($maSV) ?>
                 </div>
@@ -61,7 +60,7 @@ if (!$profileData) {
                 <table class="table table-borderless table-striped align-middle">
                     <tbody>
                         <tr>
-                            <th width="30%" class="text-gray-800">Lớp sinh hoạt:</th>
+                            <th width="30%" class="text-gray-800">Lớp hành chính:</th>
                             <td>
                                 <span class="badge badge-primary p-2" style="font-size: 14px;">
                                     <?= htmlspecialchars($profileData['tenLop'] ?? 'Chưa được phân lớp') ?>
@@ -79,8 +78,9 @@ if (!$profileData) {
                         <tr>
                             <th class="text-gray-800">Email:</th>
                             <td>
-                                <?php if(!empty($profileData['email'])): ?>
-                                    <span class="text-info font-weight-bold"><i class="fas fa-envelope mr-1"></i> <?= htmlspecialchars($profileData['email']) ?></span>
+                                <?php if (!empty($profileData['email'])): ?>
+                                    <span class="text-info font-weight-bold"><i class="fas fa-envelope mr-1"></i>
+                                        <?= htmlspecialchars($profileData['email']) ?></span>
                                 <?php else: ?>
                                     <span class="text-muted">Chưa cập nhật</span>
                                 <?php endif; ?>
