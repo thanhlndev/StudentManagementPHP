@@ -51,3 +51,19 @@ Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoạ
 **Security:** Mã hóa mật khẩu sử dụng password_hash() (Bcrypt).
 
 **UX/UI:** Giao diện Responsive tích hợp công cụ lọc thông minh theo Khoa và bộ lọc thời gian thực.
+
+**Tài khoản test:**
+admin: username: admin
+password: 612435
+
+GV01: username: gv01
+password: 612435
+
+GV09: username: gv09
+password: 123456
+
+SV01: username: sv01
+password: 612435
+
+SV11: username: sv11
+password: 123456
