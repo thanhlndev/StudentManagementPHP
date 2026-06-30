@@ -13,12 +13,13 @@ if (!defined('BASE_URL')) {
 // ==========================================
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
     unset($_SESSION['user']);
-    header("Location: " . BASE_URL . "auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.ph?error=Unauthorized");
     exit;
 }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,4 +29,5 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
     <link href="<?= BASE_URL ?>css/sb-admin-2.min.css" rel="stylesheet">
 </head>
+
 <body id="page-top">

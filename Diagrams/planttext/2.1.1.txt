@@ -1,0 +1,28 @@
+@startuml
+skinparam style strictuml
+skinparam DefaultFontName Arial
+
+actor "Người dùng" as User
+
+box "Luồng xử lý  (Ví dụ: /admin)" #F5F5F5
+    participant "index.php\n(Front Controller)" as FC
+    participant "header.php\n(Middleware Xác thực)" as Auth
+    participant "Module chức năng\n(VD: course_class.php)" as Modules
+end box
+
+database "Cơ sở dữ liệu\n(MySQL)" as DB
+
+User -> FC : Gửi HTTP Request\n(VD: admin/index.php?page=course)
+FC -> Auth : Require tệp xác thực\n(header.php)
+Auth -> Auth : Kiểm tra tồn tại Session\nvà đối chiếu Role
+
+alt Chưa đăng nhập hoặc Sai phân quyền
+    Auth --> User : Ngắt luồng & Chuyển hướng\nvề trang Login (login.php)
+else Xác thực hợp lệ
+    Auth --> FC : Trả luồng điều khiển
+    FC -> Modules : Include tệp module chức năng\ndựa theo tham số '?page='
+    Modules -> DB : Thực thi truy vấn PDO an toàn
+    DB --> Modules : Trả dữ liệu bản ghi
+    Modules --> User : Kết xuất giao diện\n
+end
+@enduml

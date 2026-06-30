@@ -14,7 +14,7 @@ if (!defined('BASE_URL')) {
 // ==========================================
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Lecturer') {
     unset($_SESSION['user']);
-    header("Location: " . BASE_URL . "auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.php?error=Unauthorized");
     exit;
 }
 ?>

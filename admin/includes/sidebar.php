@@ -42,10 +42,6 @@
         <li class="nav-item <?= ($page == 'rooms') ? 'active' : '' ?>"><a class="nav-link"
                         href="index.php?page=rooms"><i class="fas fa-user-home"></i><span>Phòng học</span></a>
         </li>
-        <li class="nav-item <?= ($page == 'class_schedules') ? 'active' : '' ?>"><a class="nav-link"
-                        href="index.php?page=class_schedules"><i class="fas fa-user-home"></i><span>Quản lý thời gian
-                                cho LHP</span></a>
-        </li>
 
         <hr class="sidebar-divider">
         <div class="sidebar-heading">Cấu hình Hệ thống</div>
