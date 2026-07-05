@@ -11,11 +11,12 @@ if (!defined('BASE_URL')) {
 // ==========================================
 // CHỐT CHẶN BẢO MẬT DÀNH RIÊNG CHO SINH VIÊN
 // ==========================================
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
-    unset($_SESSION['user']);
-    header("Location: " . BASE_URL . "auth/login.ph?error=Unauthorized");
-    exit;
-}
+// Kiểm tra xem người dùng đã đăng nhập và có vai trò là "Student" hay không| nếu test thì comment dòng dưới đi
+// if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
+//     unset($_SESSION['user']);
+//     header("Location: " . BASE_URL . "auth/login.ph?error=Unauthorized");
+//     exit;
+// }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
