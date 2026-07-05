@@ -1,21 +1,21 @@
 <?php
 /** @var PDO $pdo */
 
-// $maSV = $_SESSION['user']['username'];
+$maSV = $_SESSION['user']['username'];
 //for testing purposes, you can uncomment the following lines to simulate POST requests with JSON or form-urlencoded data
-$input = file_get_contents("php://input");
-parse_str($input, $post_vars); // Nếu là form-urlencoded
-if (empty($post_vars)) {
-    $post_vars = json_decode($input, true); // Nếu là JSON
-}
-$maSV = isset($_POST['user_id']) ? $_POST['user_id'] : ($post_vars['user_id'] ?? '');
-$maLHP_reg = isset($_POST['maLHP']) ? (int) $_POST['maLHP'] : (int) ($post_vars['maLHP'] ?? 0);
+// $input = file_get_contents("php://input");
+// parse_str($input, $post_vars); // Nếu là form-urlencoded
+// if (empty($post_vars)) {
+//     $post_vars = json_decode($input, true); // Nếu là JSON
+// }
+// $maSV = isset($_POST['user_id']) ? $_POST['user_id'] : ($post_vars['user_id'] ?? '');
+// $maLHP_reg = isset($_POST['maLHP']) ? (int) $_POST['maLHP'] : (int) ($post_vars['maLHP'] ?? 0);
 
 // ==========================================
 // 1. XỬ LÝ LOGIC ĐĂNG KÝ HỌC PHẦN (POST)
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'register') {
-    // $maLHP_reg = (int) $_POST['maLHP'];
+    $maLHP_reg = (int) $_POST['maLHP'];
 
     try {
         $pdo->beginTransaction();
