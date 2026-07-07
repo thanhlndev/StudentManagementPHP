@@ -6,8 +6,8 @@ function getDBConnection()
 {
     $host = "localhost";
     $db_name = "qlsv";
-    $username = "thanh";
-    $password = "612435";
+    $username = "root";
+    $password = "";
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$host;dbname=$db_name;charset=$charset";

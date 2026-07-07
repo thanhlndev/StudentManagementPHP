@@ -6,668 +6,1908 @@
 -- Generation Time: Jul 05, 2026 at 04:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
+SET
+  SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
 
+SET
+  time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+
 /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `qlsv`
 --
+CREATE DATABASE IF NOT EXISTS `qlsv` DEFAULT CHARACTER
+SET
+  utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE `qlsv`;
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `accounts`
 --
-
-CREATE TABLE `accounts` (
-  `username` varchar(20) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `role` varchar(20) NOT NULL,
-  `isActive` tinyint(1) DEFAULT 1,
-  `createdAt` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `accounts` (
+    `username` varchar(20) NOT NULL,
+    `password` varchar(255) DEFAULT NULL,
+    `role` varchar(20) NOT NULL,
+    `isActive` tinyint (1) DEFAULT 1,
+    `createdAt` datetime DEFAULT current_timestamp()
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `accounts`
 --
-
-INSERT INTO `accounts` (`username`, `password`, `role`, `isActive`, `createdAt`) VALUES
-('admin', '$2y$10$O/ua.XOMkho/mPQEVsoy1.IV0YopQl.WbrTj1sxnSxXjEwVZ9uv6C', 'Admin', 1, '2026-06-24 14:48:48'),
-('gv01', '$2y$10$wOUI.EqI8corfdduw7XLk.M3NWMqYUzrrMTQcKmCGFi4ZdzKEHYUO', 'Lecturer', 1, '2026-06-24 14:43:33'),
-('gv02', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv03', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv04', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv05', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv06', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv07', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv08', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv09', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv10', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-24 16:24:05'),
-('gv11', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-25 15:35:18'),
-('gv12', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-25 15:35:18'),
-('gv13', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Lecturer', 1, '2026-06-25 15:35:18'),
-('gv19', '$2y$10$tGWqqaKR9dQbJnTFvLhez.GP4vY9mhoayFM83ncyi0tECx3ULKbHu', 'Lecturer', 1, '2026-06-26 05:34:32'),
-('SV001', '$2y$10$3QSAKBK/cTi9LFF7zu1vyO3GaQZZzsFjUqXTG1PdgWvPYpVrGQJTm', 'Student', 1, '2026-06-25 15:46:00'),
-('sv01', '$2y$10$LVhLKuxsQLw1cDTyFQ..i.qBvOrrJrwK97.i36VV8bejaGhCAaTzy', 'Student', 1, '2026-06-24 14:43:33'),
-('sv02', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv03', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv04', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv05', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv06', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv07', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv08', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv09', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv10', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-24 16:24:05'),
-('sv11', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-25 15:35:18'),
-('sv12', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-25 15:35:18'),
-('sv13', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-25 15:35:18'),
-('sv14', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-25 15:35:18'),
-('sv15', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 1, '2026-06-25 15:35:18'),
-('sv16', '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i', 'Student', 0, '2026-06-25 15:35:18'),
-('sv17', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv18', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv19', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv20', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv21', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv22', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv23', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv24', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv25', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv26', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv27', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv28', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv29', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv30', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv31', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv32', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv33', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv34', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv35', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv36', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv37', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv38', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv39', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv40', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv41', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv42', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv43', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv44', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv45', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv46', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv47', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv48', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv49', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv50', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv51', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv52', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv53', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv54', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv55', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv56', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv57', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv58', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv59', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23'),
-('sv60', '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6', 'Student', 1, '2026-07-05 20:39:23');
+INSERT INTO
+  `accounts` (
+    `username`,
+    `password`,
+    `role`,
+    `isActive`,
+    `createdAt`
+  )
+VALUES
+  (
+    'admin',
+    '$2y$10$O/ua.XOMkho/mPQEVsoy1.IV0YopQl.WbrTj1sxnSxXjEwVZ9uv6C',
+    'Admin',
+    1,
+    '2026-06-24 14:48:48'
+  ),
+  (
+    'gv01',
+    '$2y$10$wOUI.EqI8corfdduw7XLk.M3NWMqYUzrrMTQcKmCGFi4ZdzKEHYUO',
+    'Lecturer',
+    1,
+    '2026-06-24 14:43:33'
+  ),
+  (
+    'gv02',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv03',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv04',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv05',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv06',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv07',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv08',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv09',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv10',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'gv11',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'gv12',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'gv13',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Lecturer',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'gv19',
+    '$2y$10$tGWqqaKR9dQbJnTFvLhez.GP4vY9mhoayFM83ncyi0tECx3ULKbHu',
+    'Lecturer',
+    1,
+    '2026-06-26 05:34:32'
+  ),
+  (
+    'SV001',
+    '$2y$10$3QSAKBK/cTi9LFF7zu1vyO3GaQZZzsFjUqXTG1PdgWvPYpVrGQJTm',
+    'Student',
+    1,
+    '2026-06-25 15:46:00'
+  ),
+  (
+    'sv01',
+    '$2y$10$LVhLKuxsQLw1cDTyFQ..i.qBvOrrJrwK97.i36VV8bejaGhCAaTzy',
+    'Student',
+    1,
+    '2026-06-24 14:43:33'
+  ),
+  (
+    'sv02',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv03',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv04',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv05',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv06',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv07',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv08',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv09',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv10',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-24 16:24:05'
+  ),
+  (
+    'sv11',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv12',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv13',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv14',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv15',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    1,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv16',
+    '$2y$10$FImpoYUlsHrBpzypufQuXOCQGDF6OqvsxbWHzlIKxzHU8mNvyg32i',
+    'Student',
+    0,
+    '2026-06-25 15:35:18'
+  ),
+  (
+    'sv17',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv18',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv19',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv20',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv21',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv22',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv23',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv24',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv25',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv26',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv27',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv28',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv29',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv30',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv31',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv32',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv33',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv34',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv35',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv36',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv37',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv38',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv39',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv40',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv41',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv42',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv43',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv44',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv45',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv46',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv47',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv48',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv49',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv50',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv51',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv52',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv53',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv54',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv55',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv56',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv57',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv58',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv59',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  ),
+  (
+    'sv60',
+    '$2y$10$7lW4VBIDR2bHJ3U1lWBnvOusGQ8MQnwv11Rp2zHAaerQZMZYebNm6',
+    'Student',
+    1,
+    '2026-07-05 20:39:23'
+  );
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `classes`
 --
-
-CREATE TABLE `classes` (
-  `maLop` varchar(20) NOT NULL,
-  `tenLop` varchar(100) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `maKhoa` varchar(20) NOT NULL,
-  `maGV` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `classes` (
+    `maLop` varchar(20) NOT NULL,
+    `tenLop` varchar(100) NOT NULL,
+    `email` varchar(100) DEFAULT NULL,
+    `maKhoa` varchar(20) NOT NULL,
+    `maGV` varchar(20) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `classes`
 --
-
-INSERT INTO `classes` (`maLop`, `tenLop`, `email`, `maKhoa`, `maGV`) VALUES
-('LH01', 'CNTT Khóa 01', 'cntt1@university.edu.vn', 'CNTT', 'gv01'),
-('LH02', 'CNTT Khóa 2', 'cntt2@university.edu.vn', 'CNTT', 'gv02'),
-('LH03', 'Kinh tế đối ngoại', 'ktdn@university.edu.vn', 'KTE', 'gv03'),
-('LH04', 'Quản trị kinh doanh', 'qtkd@university.edu.vn', 'KTE', 'gv04'),
-('LH05', 'Ngôn ngữ Anh', 'nna@university.edu.vn', 'NN', 'gv05'),
-('LH06', 'Ngôn ngữ Trung', 'nnt@university.edu.vn', 'NN', 'gv06'),
-('LH07', 'Kỹ thuật Sinh học', 'ktsinhhoc@university.edu.vn', 'KHUD', 'gv07'),
-('LH08', 'Tự động hóa', 'tdh@university.edu.vn', 'XDTD', 'gv08'),
-('LH09', 'Luật Kinh tế', 'luatkt@university.edu.vn', 'LUAT', 'gv09'),
-('LH10', 'Quản trị dịch vụ Du lịch', 'qtdl@university.edu.vn', 'DL', 'gv10'),
-('LH11', 'Luật Dân sự K1', 'luatds1@university.edu.vn', 'luat', 'gv11'),
-('LH12', 'Luật Hình sự K1', 'luaths1@university.edu.vn', 'luat', 'gv12');
+INSERT INTO
+  `classes` (`maLop`, `tenLop`, `email`, `maKhoa`, `maGV`)
+VALUES
+  (
+    'LH01',
+    'CNTT Khóa 01',
+    'cntt1@university.edu.vn',
+    'CNTT',
+    'gv01'
+  ),
+  (
+    'LH02',
+    'CNTT Khóa 2',
+    'cntt2@university.edu.vn',
+    'CNTT',
+    'gv02'
+  ),
+  (
+    'LH03',
+    'Kinh tế đối ngoại',
+    'ktdn@university.edu.vn',
+    'KTE',
+    'gv03'
+  ),
+  (
+    'LH04',
+    'Quản trị kinh doanh',
+    'qtkd@university.edu.vn',
+    'KTE',
+    'gv04'
+  ),
+  (
+    'LH05',
+    'Ngôn ngữ Anh',
+    'nna@university.edu.vn',
+    'NN',
+    'gv05'
+  ),
+  (
+    'LH06',
+    'Ngôn ngữ Trung',
+    'nnt@university.edu.vn',
+    'NN',
+    'gv06'
+  ),
+  (
+    'LH07',
+    'Kỹ thuật Sinh học',
+    'ktsinhhoc@university.edu.vn',
+    'KHUD',
+    'gv07'
+  ),
+  (
+    'LH08',
+    'Tự động hóa',
+    'tdh@university.edu.vn',
+    'XDTD',
+    'gv08'
+  ),
+  (
+    'LH09',
+    'Luật Kinh tế',
+    'luatkt@university.edu.vn',
+    'LUAT',
+    'gv09'
+  ),
+  (
+    'LH10',
+    'Quản trị dịch vụ Du lịch',
+    'qtdl@university.edu.vn',
+    'DL',
+    'gv10'
+  ),
+  (
+    'LH11',
+    'Luật Dân sự K1',
+    'luatds1@university.edu.vn',
+    'luat',
+    'gv11'
+  ),
+  (
+    'LH12',
+    'Luật Hình sự K1',
+    'luaths1@university.edu.vn',
+    'luat',
+    'gv12'
+  );
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `class_schedules`
 --
-
-CREATE TABLE `class_schedules` (
-  `schedule_id` int(11) NOT NULL,
-  `day_of_week` tinyint(4) NOT NULL COMMENT '2=Thứ 2, ..., 8=Chủ nhật',
-  `start_period` tinyint(4) NOT NULL COMMENT 'Tiết bắt đầu (1-15)',
-  `num_periods` tinyint(4) NOT NULL COMMENT 'Số tiết kéo dài',
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `maLHP` int(11) NOT NULL,
-  `room_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `class_schedules` (
+    `schedule_id` int (11) NOT NULL,
+    `day_of_week` tinyint (4) NOT NULL COMMENT '2=Thứ 2, ..., 8=Chủ nhật',
+    `start_period` tinyint (4) NOT NULL COMMENT 'Tiết bắt đầu (1-15)',
+    `num_periods` tinyint (4) NOT NULL COMMENT 'Số tiết kéo dài',
+    `start_date` date DEFAULT NULL,
+    `end_date` date DEFAULT NULL,
+    `maLHP` int (11) NOT NULL,
+    `room_id` int (11) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `class_schedules`
 --
-
-INSERT INTO `class_schedules` (`schedule_id`, `day_of_week`, `start_period`, `num_periods`, `start_date`, `end_date`, `maLHP`, `room_id`) VALUES
-(1, 2, 1, 3, '2023-09-05', '2024-01-15', 1, 1),
-(2, 4, 7, 2, '2023-09-05', '2024-01-15', 1, 3),
-(3, 6, 1, 3, '2023-09-05', '2024-01-15', 10, 5),
-(4, 2, 2, 3, '2023-09-05', '2024-01-15', 3, 2),
-(5, 3, 4, 2, '2023-09-05', '2024-01-15', 2, 2),
-(6, 6, 2, 3, '2023-09-05', '2024-01-15', 2, 4),
-(7, 5, 1, 3, '2023-09-05', '2024-01-15', 4, 1),
-(8, 2, 7, 3, '2024-09-05', '2025-01-15', 11, 5),
-(9, 4, 1, 4, '2024-09-05', '2025-01-15', 12, 1),
-(10, 5, 7, 3, '2024-09-05', '2025-01-15', 13, 2),
-(11, 6, 4, 2, '2024-09-05', '2025-01-15', 14, 5),
-(12, 2, 1, 3, '2023-09-05', '2024-01-15', 8, 1),
-(14, 2, 7, 2, '2025-01-16', '2025-05-30', 15, 1),
-(15, 2, 1, 5, '2025-06-27', '2025-08-29', 16, 6),
-(16, 3, 5, 4, '2026-02-27', '2026-10-27', 9, 6),
-(17, 2, 1, 5, '2026-04-27', '2026-06-28', 7, 1);
+INSERT INTO
+  `class_schedules` (
+    `schedule_id`,
+    `day_of_week`,
+    `start_period`,
+    `num_periods`,
+    `start_date`,
+    `end_date`,
+    `maLHP`,
+    `room_id`
+  )
+VALUES
+  (1, 2, 1, 3, '2023-09-05', '2024-01-15', 1, 1),
+  (2, 4, 7, 2, '2023-09-05', '2024-01-15', 1, 3),
+  (3, 6, 1, 3, '2023-09-05', '2024-01-15', 10, 5),
+  (4, 2, 2, 3, '2023-09-05', '2024-01-15', 3, 2),
+  (5, 3, 4, 2, '2023-09-05', '2024-01-15', 2, 2),
+  (6, 6, 2, 3, '2023-09-05', '2024-01-15', 2, 4),
+  (7, 5, 1, 3, '2023-09-05', '2024-01-15', 4, 1),
+  (8, 2, 7, 3, '2024-09-05', '2025-01-15', 11, 5),
+  (9, 4, 1, 4, '2024-09-05', '2025-01-15', 12, 1),
+  (10, 5, 7, 3, '2024-09-05', '2025-01-15', 13, 2),
+  (11, 6, 4, 2, '2024-09-05', '2025-01-15', 14, 5),
+  (12, 2, 1, 3, '2023-09-05', '2024-01-15', 8, 1),
+  (14, 2, 7, 2, '2025-01-16', '2025-05-30', 15, 1),
+  (15, 2, 1, 5, '2025-06-27', '2025-08-29', 16, 6),
+  (16, 3, 5, 4, '2026-02-27', '2026-10-27', 9, 6),
+  (17, 2, 1, 5, '2026-04-27', '2026-06-28', 7, 1);
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `courseclasses`
 --
-
-CREATE TABLE `courseclasses` (
-  `maLHP` int(11) NOT NULL,
-  `maMH` varchar(20) NOT NULL,
-  `maHK` varchar(20) NOT NULL,
-  `maGV` varchar(20) NOT NULL,
-  `isLocked` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `courseclasses` (
+    `maLHP` int (11) NOT NULL,
+    `maMH` varchar(20) NOT NULL,
+    `maHK` varchar(20) NOT NULL,
+    `maGV` varchar(20) NOT NULL,
+    `isLocked` tinyint (1) DEFAULT 0
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `courseclasses`
 --
-
-INSERT INTO `courseclasses` (`maLHP`, `maMH`, `maHK`, `maGV`, `isLocked`) VALUES
-(1, 'CS101', 'HK2023.1', 'gv01', 0),
-(2, 'CS102', 'HK2023.1', 'gv02', 0),
-(3, 'EC201', 'HK2023.1', 'gv03', 0),
-(4, 'BA202', 'HK2023.2', 'gv04', 0),
-(5, 'EN101', 'HK2023.2', 'gv05', 0),
-(6, 'CH301', 'HK2024.1', 'gv07', 0),
-(7, 'AU401', 'HK2024.1', 'gv08', 0),
-(8, 'LW501', 'HK2024.2', 'gv09', 0),
-(9, 'TO601', 'HK2024.2', 'gv10', 0),
-(10, 'MA101', 'HK2023.1', 'gv01', 0),
-(11, 'LW502', 'HK2024.1', 'gv11', 0),
-(12, 'LW503', 'HK2024.1', 'gv12', 0),
-(13, 'LW504', 'HK2024.1', 'gv13', 0),
-(14, 'LW505', 'HK2024.2', 'gv11', 0),
-(15, 'LW501', 'HK2024.2', 'gv12', 0),
-(16, 'LW501', 'HK2024.2', 'gv12', 0);
+INSERT INTO
+  `courseclasses` (`maLHP`, `maMH`, `maHK`, `maGV`, `isLocked`)
+VALUES
+  (1, 'CS101', 'HK2023.1', 'gv01', 0),
+  (2, 'CS102', 'HK2023.1', 'gv02', 0),
+  (3, 'EC201', 'HK2023.1', 'gv03', 0),
+  (4, 'BA202', 'HK2023.2', 'gv04', 0),
+  (5, 'EN101', 'HK2023.2', 'gv05', 0),
+  (6, 'CH301', 'HK2024.1', 'gv07', 0),
+  (7, 'AU401', 'HK2024.1', 'gv08', 0),
+  (8, 'LW501', 'HK2024.2', 'gv09', 0),
+  (9, 'TO601', 'HK2024.2', 'gv10', 0),
+  (10, 'MA101', 'HK2023.1', 'gv01', 0),
+  (11, 'LW502', 'HK2024.1', 'gv11', 0),
+  (12, 'LW503', 'HK2024.1', 'gv12', 0),
+  (13, 'LW504', 'HK2024.1', 'gv13', 0),
+  (14, 'LW505', 'HK2024.2', 'gv11', 0),
+  (15, 'LW501', 'HK2024.2', 'gv12', 0),
+  (16, 'LW501', 'HK2024.2', 'gv12', 0);
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `courses`
 --
-
-CREATE TABLE `courses` (
-  `maMH` varchar(20) NOT NULL,
-  `tenMH` varchar(100) NOT NULL,
-  `soTinChi` int(11) DEFAULT 3,
-  `maKhoa` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `courses` (
+    `maMH` varchar(20) NOT NULL,
+    `tenMH` varchar(100) NOT NULL,
+    `soTinChi` int (11) DEFAULT 3,
+    `maKhoa` varchar(20) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `courses`
 --
-
-INSERT INTO `courses` (`maMH`, `tenMH`, `soTinChi`, `maKhoa`) VALUES
-('AU401', 'Hệ thống điều khiển tự động', 4, 'XDTD'),
-('BA202', 'Quản trị học cơ bản', 3, 'KTE'),
-('CH301', 'Hóa học đại cương', 3, 'KHUD'),
-('CS101', 'Cơ sở dữ liệu', 3, 'CNTT'),
-('CS102', 'Lập trình hướng đối tượng', 4, 'CNTT'),
-('EC201', 'Kinh tế vĩ mô', 3, 'KTE'),
-('EN101', 'Tiếng Anh giao tiếp 1', 2, 'NN'),
-('LW501', 'Luật đại cương', 2, 'luat'),
-('LW502', 'Luật Dân sự 1', 3, 'luat'),
-('LW503', 'Luật Hình sự', 4, 'luat'),
-('LW504', 'Luật Thương mại Quốc tế', 3, 'luat'),
-('LW505', 'Hiến pháp và Pháp luật', 2, 'luat'),
-('MA101', 'Toán cao cấp A1', 4, 'KHUD'),
-('TO601', 'Tổng quan ngành du lịch', 3, 'DL');
+INSERT INTO
+  `courses` (`maMH`, `tenMH`, `soTinChi`, `maKhoa`)
+VALUES
+  ('AU401', 'Hệ thống điều khiển tự động', 4, 'XDTD'),
+  ('BA202', 'Quản trị học cơ bản', 3, 'KTE'),
+  ('CH301', 'Hóa học đại cương', 3, 'KHUD'),
+  ('CS101', 'Cơ sở dữ liệu', 3, 'CNTT'),
+  ('CS102', 'Lập trình hướng đối tượng', 4, 'CNTT'),
+  ('EC201', 'Kinh tế vĩ mô', 3, 'KTE'),
+  ('EN101', 'Tiếng Anh giao tiếp 1', 2, 'NN'),
+  ('LW501', 'Luật đại cương', 2, 'luat'),
+  ('LW502', 'Luật Dân sự 1', 3, 'luat'),
+  ('LW503', 'Luật Hình sự', 4, 'luat'),
+  ('LW504', 'Luật Thương mại Quốc tế', 3, 'luat'),
+  ('LW505', 'Hiến pháp và Pháp luật', 2, 'luat'),
+  ('MA101', 'Toán cao cấp A1', 4, 'KHUD'),
+  ('TO601', 'Tổng quan ngành du lịch', 3, 'DL');
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `faculties`
 --
-
-CREATE TABLE `faculties` (
-  `maKhoa` varchar(20) NOT NULL,
-  `tenKhoa` varchar(100) NOT NULL,
-  `diaChi` varchar(200) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `sdt` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `faculties` (
+    `maKhoa` varchar(20) NOT NULL,
+    `tenKhoa` varchar(100) NOT NULL,
+    `diaChi` varchar(200) DEFAULT NULL,
+    `email` varchar(100) DEFAULT NULL,
+    `sdt` varchar(20) DEFAULT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `faculties`
 --
-
-INSERT INTO `faculties` (`maKhoa`, `tenKhoa`, `diaChi`, `email`, `sdt`) VALUES
-('CNTT', 'Công nghệ thông tin', 'Tòa nhà A, Tầng 2', 'cntt@university.edu.vn', '0243111222'),
-('DL', 'Du lịch và Khách sạn', 'Tòa nhà G, Tầng 1', 'dulich@university.edu.vn', '0243111888'),
-('KHUD', 'Khoa học ứng dụng', 'Tòa nhà D, Tầng 1', 'khud@university.edu.vn', '0243111555'),
-('KTE', 'Kinh tế và Quản trị', 'Tòa nhà B, Tầng 1', 'kinhte@university.edu.vn', '0243111333'),
-('luat', 'Luật học', 'Tòa nhà F, Tầng 4', 'luat@university.edu.vn', '0243111777'),
-('MT', 'Môi trường', 'Tòa nhà I, Tầng 2', 'moitruong@university.edu.vn', '0243111000'),
-('NN', 'Ngoại ngữ', 'Tòa nhà C, Tầng 3', 'ngoaingu@university.edu.vn', '0243111444'),
-('QLCC', 'Quản lý công', 'Tòa nhà J, Tầng 3', 'qlcc@university.edu.vn', '0243111111'),
-('XDTD', 'Xây dựng và Tự động hóa', 'Tòa nhà E, Tầng 2', 'xdtd@university.edu.vn', '0243111666'),
-('YDUOC', 'Y Dược', 'Tòa nhà H, Tầng 5', 'yduoc@university.edu.vn', '0243111999');
+INSERT INTO
+  `faculties` (`maKhoa`, `tenKhoa`, `diaChi`, `email`, `sdt`)
+VALUES
+  (
+    'CNTT',
+    'Công nghệ thông tin',
+    'Tòa nhà A, Tầng 2',
+    'cntt@university.edu.vn',
+    '0243111222'
+  ),
+  (
+    'DL',
+    'Du lịch và Khách sạn',
+    'Tòa nhà G, Tầng 1',
+    'dulich@university.edu.vn',
+    '0243111888'
+  ),
+  (
+    'KHUD',
+    'Khoa học ứng dụng',
+    'Tòa nhà D, Tầng 1',
+    'khud@university.edu.vn',
+    '0243111555'
+  ),
+  (
+    'KTE',
+    'Kinh tế và Quản trị',
+    'Tòa nhà B, Tầng 1',
+    'kinhte@university.edu.vn',
+    '0243111333'
+  ),
+  (
+    'luat',
+    'Luật học',
+    'Tòa nhà F, Tầng 4',
+    'luat@university.edu.vn',
+    '0243111777'
+  ),
+  (
+    'MT',
+    'Môi trường',
+    'Tòa nhà I, Tầng 2',
+    'moitruong@university.edu.vn',
+    '0243111000'
+  ),
+  (
+    'NN',
+    'Ngoại ngữ',
+    'Tòa nhà C, Tầng 3',
+    'ngoaingu@university.edu.vn',
+    '0243111444'
+  ),
+  (
+    'QLCC',
+    'Quản lý công',
+    'Tòa nhà J, Tầng 3',
+    'qlcc@university.edu.vn',
+    '0243111111'
+  ),
+  (
+    'XDTD',
+    'Xây dựng và Tự động hóa',
+    'Tòa nhà E, Tầng 2',
+    'xdtd@university.edu.vn',
+    '0243111666'
+  ),
+  (
+    'YDUOC',
+    'Y Dược',
+    'Tòa nhà H, Tầng 5',
+    'yduoc@university.edu.vn',
+    '0243111999'
+  );
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `grades`
 --
-
-CREATE TABLE `grades` (
-  `maSV` varchar(20) NOT NULL,
-  `maLHP` int(11) NOT NULL,
-  `diem1` decimal(4,2) DEFAULT NULL CHECK (`diem1` between 0 and 10),
-  `diem2` decimal(4,2) DEFAULT NULL CHECK (`diem2` between 0 and 10),
-  `diemThi` decimal(4,2) DEFAULT NULL CHECK (`diemThi` between 0 and 10),
-  `diemTong` decimal(4,2) GENERATED ALWAYS AS (cast((`diem1` + `diem2`) / 2.0 * 0.4 + `diemThi` * 0.6 as decimal(4,2))) VIRTUAL,
-  `diemTongChu` varchar(2) GENERATED ALWAYS AS (case when `diemTong` is null then NULL when `diemTong` >= 8.5 then 'A' when `diemTong` >= 8.0 then 'B+' when `diemTong` >= 7.0 then 'B' when `diemTong` >= 6.5 then 'C+' when `diemTong` >= 5.5 then 'C' when `diemTong` >= 5.0 then 'D+' when `diemTong` >= 4.0 then 'D' else 'F' end) VIRTUAL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `grades` (
+    `maSV` varchar(20) NOT NULL,
+    `maLHP` int (11) NOT NULL,
+    `diem1` decimal(4, 2) DEFAULT NULL CHECK (`diem1` between 0 and 10),
+    `diem2` decimal(4, 2) DEFAULT NULL CHECK (`diem2` between 0 and 10),
+    `diemThi` decimal(4, 2) DEFAULT NULL CHECK (`diemThi` between 0 and 10),
+    `diemTong` decimal(4, 2) GENERATED ALWAYS AS (
+      cast(
+        (`diem1` + `diem2`) / 2.0 * 0.4 + `diemThi` * 0.6 as decimal(4, 2)
+      )
+    ) VIRTUAL,
+    `diemTongChu` varchar(2) GENERATED ALWAYS AS (
+      case
+        when `diemTong` is null then NULL
+        when `diemTong` >= 8.5 then 'A'
+        when `diemTong` >= 8.0 then 'B+'
+        when `diemTong` >= 7.0 then 'B'
+        when `diemTong` >= 6.5 then 'C+'
+        when `diemTong` >= 5.5 then 'C'
+        when `diemTong` >= 5.0 then 'D+'
+        when `diemTong` >= 4.0 then 'D'
+        else 'F'
+      end
+    ) VIRTUAL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `grades`
 --
-
-INSERT INTO `grades` (`maSV`, `maLHP`, `diem1`, `diem2`, `diemThi`) VALUES
-('SV001', 11, NULL, NULL, NULL),
-('SV001', 14, NULL, NULL, NULL),
-('sv01', 1, 9.50, 9.50, 9.50),
-('sv01', 10, 8.00, 9.00, 9.00),
-('sv02', 1, 8.50, 8.50, 8.00),
-('sv03', 2, 7.50, 7.50, 7.50),
-('sv04', 3, 7.00, 7.00, 6.50),
-('sv05', 4, 6.00, 6.00, 6.00),
-('sv06', 5, 5.50, 5.50, 5.00),
-('sv08', 6, 4.50, 4.50, 4.50),
-('sv09', 7, 3.00, 3.00, 3.00),
-('sv10', 8, 8.00, 8.00, 9.00),
-('sv11', 11, 8.00, 9.00, 8.50),
-('sv11', 12, NULL, NULL, NULL),
-('sv11', 13, 10.00, 9.50, 9.00),
-('sv11', 14, NULL, NULL, NULL),
-('sv11', 16, NULL, NULL, NULL),
-('sv12', 11, 4.00, 5.00, 3.50),
-('sv12', 13, 8.00, 8.00, 8.00),
-('sv13', 11, 9.50, 10.00, 9.50),
-('sv14', 12, NULL, NULL, NULL),
-('sv18', 12, NULL, NULL, NULL),
-('sv19', 12, NULL, NULL, NULL),
-('sv20', 12, NULL, NULL, NULL),
-('sv25', 12, NULL, NULL, NULL),
-('sv27', 12, NULL, NULL, NULL),
-('sv28', 12, NULL, NULL, NULL),
-('sv29', 12, NULL, NULL, NULL),
-('sv32', 12, NULL, NULL, NULL),
-('sv33', 12, NULL, NULL, NULL),
-('sv34', 12, NULL, NULL, NULL),
-('sv41', 12, NULL, NULL, NULL),
-('sv42', 12, NULL, NULL, NULL),
-('sv44', 12, NULL, NULL, NULL),
-('sv51', 12, NULL, NULL, NULL),
-('sv52', 12, NULL, NULL, NULL),
-('sv54', 12, NULL, NULL, NULL),
-('sv58', 12, NULL, NULL, NULL),
-('sv59', 12, NULL, NULL, NULL);
+INSERT INTO
+  `grades` (`maSV`, `maLHP`, `diem1`, `diem2`, `diemThi`)
+VALUES
+  ('SV001', 11, NULL, NULL, NULL),
+  ('SV001', 14, NULL, NULL, NULL),
+  ('sv01', 1, 9.50, 9.50, 9.50),
+  ('sv01', 10, 8.00, 9.00, 9.00),
+  ('sv02', 1, 8.50, 8.50, 8.00),
+  ('sv03', 2, 7.50, 7.50, 7.50),
+  ('sv04', 3, 7.00, 7.00, 6.50),
+  ('sv05', 4, 6.00, 6.00, 6.00),
+  ('sv06', 5, 5.50, 5.50, 5.00),
+  ('sv08', 6, 4.50, 4.50, 4.50),
+  ('sv09', 7, 3.00, 3.00, 3.00),
+  ('sv10', 8, 8.00, 8.00, 9.00),
+  ('sv11', 11, 8.00, 9.00, 8.50),
+  ('sv11', 12, NULL, NULL, NULL),
+  ('sv11', 13, 10.00, 9.50, 9.00),
+  ('sv11', 14, NULL, NULL, NULL),
+  ('sv11', 16, NULL, NULL, NULL),
+  ('sv12', 11, 4.00, 5.00, 3.50),
+  ('sv12', 13, 8.00, 8.00, 8.00),
+  ('sv13', 11, 9.50, 10.00, 9.50),
+  ('sv14', 12, NULL, NULL, NULL),
+  ('sv18', 12, NULL, NULL, NULL),
+  ('sv19', 12, NULL, NULL, NULL),
+  ('sv20', 12, NULL, NULL, NULL),
+  ('sv25', 12, NULL, NULL, NULL),
+  ('sv27', 12, NULL, NULL, NULL),
+  ('sv28', 12, NULL, NULL, NULL),
+  ('sv29', 12, NULL, NULL, NULL),
+  ('sv32', 12, NULL, NULL, NULL),
+  ('sv33', 12, NULL, NULL, NULL),
+  ('sv34', 12, NULL, NULL, NULL),
+  ('sv41', 12, NULL, NULL, NULL),
+  ('sv42', 12, NULL, NULL, NULL),
+  ('sv44', 12, NULL, NULL, NULL),
+  ('sv51', 12, NULL, NULL, NULL),
+  ('sv52', 12, NULL, NULL, NULL),
+  ('sv54', 12, NULL, NULL, NULL),
+  ('sv58', 12, NULL, NULL, NULL),
+  ('sv59', 12, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `lecturers`
 --
-
-CREATE TABLE `lecturers` (
-  `maGV` varchar(20) NOT NULL,
-  `hoTenGV` varchar(100) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `sdt` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `lecturers` (
+    `maGV` varchar(20) NOT NULL,
+    `hoTenGV` varchar(100) NOT NULL,
+    `email` varchar(100) DEFAULT NULL,
+    `sdt` varchar(20) DEFAULT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lecturers`
 --
-
-INSERT INTO `lecturers` (`maGV`, `hoTenGV`, `email`, `sdt`) VALUES
-('gv01', 'Nguyễn Văn A', 'nguyenvana@university.edu.vn', '0901234567'),
-('gv02', 'Trần Thị B', 'tranthib@university.edu.vn', '0902345678'),
-('gv03', 'Lê Hoàng C', 'lehoangc@university.edu.vn', '0903456789'),
-('gv04', 'Phạm Minh D', 'phamminhd@university.edu.vn', '0904567890'),
-('gv05', 'Hoàng Trung E', 'hoangtrunge@university.edu.vn', '0905678901'),
-('gv06', 'Vũ Thị F', 'vuthif@university.edu.vn', '0906789012'),
-('gv07', 'Đặng Văn G', 'dangvang@university.edu.vn', '0907890123'),
-('gv08', 'Bùi Minh H', 'buiminhh@university.edu.vn', '0908901234'),
-('gv09', 'Ngô Thanh I', 'ngothanhi@university.edu.vn', '0909012345'),
-('gv10', 'Đỗ Đức J', 'doducj@university.edu.vn', '0900123456'),
-('gv11', 'TS. Nguyễn Luật Sư', 'luatsu.nguyen@university.edu.vn', '0911222333'),
-('gv12', 'ThS. Trần Pháp Lý', 'phaply.tran@university.edu.vn', '0911222444'),
-('gv13', 'GS. Lê Công Bằng', 'congbang.le@university.edu.vn', '0911222555'),
-('gv19', 'Giảng viên 19', 'gv19@gmail.com', '0987612345');
+INSERT INTO
+  `lecturers` (`maGV`, `hoTenGV`, `email`, `sdt`)
+VALUES
+  (
+    'gv01',
+    'Nguyễn Văn A',
+    'nguyenvana@university.edu.vn',
+    '0901234567'
+  ),
+  (
+    'gv02',
+    'Trần Thị B',
+    'tranthib@university.edu.vn',
+    '0902345678'
+  ),
+  (
+    'gv03',
+    'Lê Hoàng C',
+    'lehoangc@university.edu.vn',
+    '0903456789'
+  ),
+  (
+    'gv04',
+    'Phạm Minh D',
+    'phamminhd@university.edu.vn',
+    '0904567890'
+  ),
+  (
+    'gv05',
+    'Hoàng Trung E',
+    'hoangtrunge@university.edu.vn',
+    '0905678901'
+  ),
+  (
+    'gv06',
+    'Vũ Thị F',
+    'vuthif@university.edu.vn',
+    '0906789012'
+  ),
+  (
+    'gv07',
+    'Đặng Văn G',
+    'dangvang@university.edu.vn',
+    '0907890123'
+  ),
+  (
+    'gv08',
+    'Bùi Minh H',
+    'buiminhh@university.edu.vn',
+    '0908901234'
+  ),
+  (
+    'gv09',
+    'Ngô Thanh I',
+    'ngothanhi@university.edu.vn',
+    '0909012345'
+  ),
+  (
+    'gv10',
+    'Đỗ Đức J',
+    'doducj@university.edu.vn',
+    '0900123456'
+  ),
+  (
+    'gv11',
+    'TS. Nguyễn Luật Sư',
+    'luatsu.nguyen@university.edu.vn',
+    '0911222333'
+  ),
+  (
+    'gv12',
+    'ThS. Trần Pháp Lý',
+    'phaply.tran@university.edu.vn',
+    '0911222444'
+  ),
+  (
+    'gv13',
+    'GS. Lê Công Bằng',
+    'congbang.le@university.edu.vn',
+    '0911222555'
+  ),
+  (
+    'gv19',
+    'Giảng viên 19',
+    'gv19@gmail.com',
+    '0987612345'
+  );
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `rooms`
 --
-
-CREATE TABLE `rooms` (
-  `room_id` int(11) NOT NULL,
-  `room_name` varchar(50) NOT NULL,
-  `capacity` int(11) NOT NULL DEFAULT 50,
-  `room_type` varchar(50) DEFAULT 'Lý thuyết'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `rooms` (
+    `room_id` int (11) NOT NULL,
+    `room_name` varchar(50) NOT NULL,
+    `capacity` int (11) NOT NULL DEFAULT 50,
+    `room_type` varchar(50) DEFAULT 'Lý thuyết'
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rooms`
 --
-
-INSERT INTO `rooms` (`room_id`, `room_name`, `capacity`, `room_type`) VALUES
-(1, 'A1-101', 20, 'Lý thuyết'),
-(2, 'A1-102', 80, 'Lý thuyết'),
-(3, 'B2-201', 40, 'Thực hành máy tính'),
-(4, 'B2-202', 40, 'Thực hành máy tính'),
-(5, 'C3-301', 120, 'Hội trường'),
-(6, 'A1-103', 70, 'Lý thuyết');
+INSERT INTO
+  `rooms` (`room_id`, `room_name`, `capacity`, `room_type`)
+VALUES
+  (1, 'A1-101', 20, 'Lý thuyết'),
+  (2, 'A1-102', 80, 'Lý thuyết'),
+  (3, 'B2-201', 40, 'Thực hành máy tính'),
+  (4, 'B2-202', 40, 'Thực hành máy tính'),
+  (5, 'C3-301', 120, 'Hội trường'),
+  (6, 'A1-103', 70, 'Lý thuyết');
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `semesters`
 --
-
-CREATE TABLE `semesters` (
-  `maHK` varchar(20) NOT NULL,
-  `tenHK` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `semesters` (
+    `maHK` varchar(20) NOT NULL,
+    `tenHK` varchar(50) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `semesters`
 --
-
-INSERT INTO `semesters` (`maHK`, `tenHK`) VALUES
-('HK2023.1', 'Học kỳ 1 - Năm học 2023-2024'),
-('HK2023.2', 'Học kỳ 2 - Năm học 2023-2024'),
-('HK2023.3', 'Học kỳ phụ - Năm học 2023-2024'),
-('HK2024.1', 'Học kỳ 1 - Năm học 2024-2025'),
-('HK2024.2', 'Học kỳ 2 - Năm học 2024-2025'),
-('HK2024.3', 'Học kỳ phụ - Năm học 2024-2025'),
-('HK2025.1', 'Học kỳ 1 - Năm học 2025-2026'),
-('HK2025.2', 'Học kỳ 2 - Năm học 2025-2026'),
-('HK2026.1', 'Học kỳ 1 - Năm học 2026-2027'),
-('HK2026.2', 'Học kỳ 2 - Năm học 2026-2027');
+INSERT INTO
+  `semesters` (`maHK`, `tenHK`)
+VALUES
+  ('HK2023.1', 'Học kỳ 1 - Năm học 2023-2024'),
+  ('HK2023.2', 'Học kỳ 2 - Năm học 2023-2024'),
+  ('HK2023.3', 'Học kỳ phụ - Năm học 2023-2024'),
+  ('HK2024.1', 'Học kỳ 1 - Năm học 2024-2025'),
+  ('HK2024.2', 'Học kỳ 2 - Năm học 2024-2025'),
+  ('HK2024.3', 'Học kỳ phụ - Năm học 2024-2025'),
+  ('HK2025.1', 'Học kỳ 1 - Năm học 2025-2026'),
+  ('HK2025.2', 'Học kỳ 2 - Năm học 2025-2026'),
+  ('HK2026.1', 'Học kỳ 1 - Năm học 2026-2027'),
+  ('HK2026.2', 'Học kỳ 2 - Năm học 2026-2027');
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `students`
 --
-
-CREATE TABLE `students` (
-  `maSV` varchar(20) NOT NULL,
-  `hoTen` varchar(100) NOT NULL,
-  `gioiTinh` varchar(10) DEFAULT NULL,
-  `namSinh` int(11) DEFAULT NULL,
-  `diaChi` varchar(200) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `sdt` varchar(20) DEFAULT NULL,
-  `maLop` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE
+  `students` (
+    `maSV` varchar(20) NOT NULL,
+    `hoTen` varchar(100) NOT NULL,
+    `gioiTinh` varchar(10) DEFAULT NULL,
+    `namSinh` int (11) DEFAULT NULL,
+    `diaChi` varchar(200) DEFAULT NULL,
+    `email` varchar(100) DEFAULT NULL,
+    `sdt` varchar(20) DEFAULT NULL,
+    `maLop` varchar(20) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `students`
 --
-
-INSERT INTO `students` (`maSV`, `hoTen`, `gioiTinh`, `namSinh`, `diaChi`, `email`, `sdt`, `maLop`) VALUES
-('SV001', 'Luong Ngoc Thanh', 'Nam', 2004, 'B1-101', 'sv001@gmail.com', '0987651234', 'LH09'),
-('sv01', 'Trần Văn Nam', 'Nam', 2004, 'Hà Nội', 'vannam@student.edu.vn', '0812345678', 'LH01'),
-('sv02', 'Nguyễn Thị Mai', 'Nữ', 2004, 'Hải Phòng', 'thimai@student.edu.vn', '0823456789', 'LH01'),
-('sv03', 'Lê Minh Quân', 'Nam', 2004, 'Đà Nẵng', 'minhquan@student.edu.vn', '0834567890', 'LH02'),
-('sv04', 'Phạm Hồng Nhung', 'Nữ', 2004, 'Quảng Ninh', 'hongnhung@student.edu.vn', '0845678901', 'LH03'),
-('sv05', 'Hoàng Đình Tú', 'Nam', 2003, 'Nghệ An', 'dinhtu@student.edu.vn', '0856789012', 'LH04'),
-('sv06', 'Vũ Phương Thảo', 'Nữ', 2004, 'Thanh Hóa', 'phuongthao@student.edu.vn', '0867890123', 'LH05'),
-('sv07', 'Nguyễn Tiến Đạt', 'Nam', 2004, 'Hà Nội', 'tiendat@student.edu.vn', '0878901234', 'LH06'),
-('sv08', 'Bùi Thúy Quỳnh', 'Nữ', 2003, 'Nam Định', 'thuyquynh@student.edu.vn', '0889012345', 'LH07'),
-('sv09', 'Ngô Quốc Khánh', 'Nam', 2004, 'Thái Bình', 'quockhanh@student.edu.vn', '0890123456', 'LH08'),
-('sv10', 'Đặng Bảo Trâm', 'Nữ', 2004, 'Cần Thơ', 'baotram@student.edu.vn', '0801234567', 'LH09'),
-('sv11', 'Trần Công Lý', 'Nam', 2004, 'Hà Nội', 'congly@student.edu.vn', '0899111222', 'LH11'),
-('sv12', 'Phạm Quỳnh Án', 'Nữ', 2004, 'Hải Phòng', 'quynhan@student.edu.vn', '0899111333', 'LH11'),
-('sv13', 'Nguyễn Tòa Án', 'Nam', 2003, 'Đà Nẵng', 'toaan@student.edu.vn', '0899111444', 'LH12'),
-('sv14', 'Lê Cảnh Sát', 'Nam', 2004, 'Nghệ An', 'canhsat@student.edu.vn', '0899111555', 'LH12'),
-('sv15', 'Hoàng Biện Hộ', 'Nữ', 2004, 'Hồ Chí Minh', 'bienho@student.edu.vn', '0899111666', 'LH09'),
-('sv16', 'Võ Vô Tội', 'Nam', 2005, 'Cần Thơ', 'votoi@student.edu.vn', '0899111777', 'LH09'),
-('sv17', 'Nguyễn Văn An', 'Nam', 2005, 'Hà Nội', 'an.nv@gmail.com', '0912345617', 'LH12'),
-('sv18', 'Trần Thị Bình', 'Nữ', 2005, 'Hải Phòng', 'binh.tt@gmail.com', '0912345618', 'LH12'),
-('sv19', 'Lê Hoàng Cường', 'Nam', 2005, 'Đà Nẵng', 'cuong.lh@gmail.com', '0912345619', 'LH12'),
-('sv20', 'Phạm Hồng Dung', 'Nữ', 2005, 'TP HCM', 'dung.ph@gmail.com', '0912345620', 'LH12'),
-('sv21', 'Hoàng Minh Đức', 'Nam', 2005, 'Cần Thơ', 'duc.hm@gmail.com', '0912345621', 'LH12'),
-('sv22', 'Vũ Thị Hoa', 'Nữ', 2005, 'Quảng Ninh', 'hoa.vt@gmail.com', '0912345622', 'LH12'),
-('sv23', 'Phan Văn Hùng', 'Nam', 2005, 'Nghệ An', 'hung.pv@gmail.com', '0912345623', 'LH12'),
-('sv24', 'Đỗ Thu Hà', 'Nữ', 2005, 'Thanh Hóa', 'ha.dt@gmail.com', '0912345624', 'LH12'),
-('sv25', 'Bùi Quang Hải', 'Nam', 2005, 'Hải Dương', 'hai.bq@gmail.com', '0912345625', 'LH12'),
-('sv26', 'Đặng Thị Khánh', 'Nữ', 2005, 'Bắc Ninh', 'khanh.dt@gmail.com', '0912345626', 'LH12'),
-('sv27', 'Ngô Tiến Long', 'Nam', 2005, 'Thừa Thiên Huế', 'long.nt@gmail.com', '0912345627', 'LH12'),
-('sv28', 'Dương Thúy Minh', 'Nữ', 2005, 'Quảng Nam', 'minh.dt@gmail.com', '0912345628', 'LH12'),
-('sv29', 'Lý Văn Nam', 'Nam', 2005, 'Khánh Hòa', 'nam.lv@gmail.com', '0912345629', 'LH12'),
-('sv30', 'Trịnh Thị Nhung', 'Nữ', 2005, 'Bình Dương', 'nhung.tt@gmail.com', '0912345630', 'LH12'),
-('sv31', 'Đoàn Văn Phong', 'Nam', 2005, 'Đồng Nai', 'phong.dv@gmail.com', '0912345631', 'LH12'),
-('sv32', 'Đinh Thị Quỳnh', 'Nữ', 2005, 'Long An', 'quynh.dt@gmail.com', '0912345632', 'LH12'),
-('sv33', 'Lâm Minh Quân', 'Nam', 2005, 'Tiền Giang', 'quan.lm@gmail.com', '0912345633', 'LH12'),
-('sv34', 'Phùng Bảo Ngọc', 'Nữ', 2005, 'Vĩnh Long', 'ngoc.pb@gmail.com', '0912345634', 'LH12'),
-('sv35', 'Tống Văn Sơn', 'Nam', 2005, 'Cà Mau', 'son.tv@gmail.com', '0912345635', 'LH12'),
-('sv36', 'Trương Mai Trang', 'Nữ', 2005, 'Vũng Tàu', 'trang.tm@gmail.com', '0912345636', 'LH12'),
-('sv37', 'Mai Xuân Trường', 'Nam', 2005, 'Nam Định', 'truong.mx@gmail.com', '0912345637', 'LH12'),
-('sv38', 'Hồ Thị Tuyết', 'Nữ', 2005, 'Thái Bình', 'tuyet.ht@gmail.com', '0912345638', 'LH12'),
-('sv39', 'Cao Văn Tuấn', 'Nam', 2005, 'Ninh Bình', 'tuan.cv@gmail.com', '0912345639', 'LH12'),
-('sv40', 'Diệp Thảo Uyên', 'Nữ', 2005, 'Hà Nam', 'uyen.dt@gmail.com', '0912345640', 'LH12'),
-('sv41', 'Đỗ Hoàng Việt', 'Nam', 2005, 'Hưng Yên', 'viet.dh@gmail.com', '0912345641', 'LH12'),
-('sv42', 'Vũ Hải Yến', 'Nữ', 2005, 'Vĩnh Phúc', 'yen.vh@gmail.com', '0912345642', 'LH12'),
-('sv43', 'Nguyễn Đình Anh', 'Nam', 2005, 'Phú Thọ', 'anh.nd@gmail.com', '0912345643', 'LH12'),
-('sv44', 'Trần Huyền Châu', 'Nữ', 2005, 'Bắc Giang', 'chau.th@gmail.com', '0912345644', 'LH12'),
-('sv45', 'Lê Quốc Duy', 'Nam', 2005, 'Lạng Sơn', 'duy.lq@gmail.com', '0912345645', 'LH12'),
-('sv46', 'Phạm Thu Giang', 'Nữ', 2005, 'Sơn La', 'giang.pt@gmail.com', '0912345646', 'LH12'),
-('sv47', 'Hoàng Gia Huy', 'Nam', 2005, 'Lào Cai', 'huy.hg@gmail.com', '0912345647', 'LH12'),
-('sv48', 'Vũ Minh Khuê', 'Nữ', 2005, 'Yên Bái', 'khue.vm@gmail.com', '0912345648', 'LH12'),
-('sv49', 'Phan Thanh Liêm', 'Nam', 2005, 'Hòa Bình', 'liem.pt@gmail.com', '0912345649', 'LH12'),
-('sv50', 'Đỗ Khánh Linh', 'Nữ', 2005, 'Thái Nguyên', 'linh.dk@gmail.com', '0912345650', 'LH12'),
-('sv51', 'Bùi Đức Mạnh', 'Nam', 2005, 'Tuyên Quang', 'manh.bd@gmail.com', '0912345651', 'LH12'),
-('sv52', 'Đặng Hồng Nga', 'Nữ', 2005, 'Cao Bằng', 'nga.dh@gmail.com', '0912345652', 'LH12'),
-('sv53', 'Ngô Chí Phát', 'Nam', 2005, 'Hà Giang', 'phat.nc@gmail.com', '0912345653', 'LH12'),
-('sv54', 'Dương Minh Phương', 'Nữ', 2005, 'Lai Châu', 'phuong.dm@gmail.com', '0912345654', 'LH12'),
-('sv55', 'Lý Thành Tâm', 'Nam', 2005, 'Điện Biên', 'tam.lt@gmail.com', '0912345655', 'LH12'),
-('sv56', 'Trịnh Diệp Thảo', 'Nữ', 2005, 'Gia Lai', 'thao.td@gmail.com', '0912345656', 'LH12'),
-('sv57', 'Đoàn Anh Tú', 'Nam', 2005, 'Đắk Lắk', 'tu.da@gmail.com', '0912345657', 'LH12'),
-('sv58', 'Đinh Cẩm Vân', 'Nữ', 2005, 'Lâm Đồng', 'van.dc@gmail.com', '0912345658', 'LH12'),
-('sv59', 'Lâm Quốc Vũ', 'Nam', 2005, 'Bình Phước', 'vu.lq@gmail.com', '0912345659', 'LH12'),
-('sv60', 'Phùng Kim Xuân', 'Nữ', 2005, 'Tây Ninh', 'xuan.pk@gmail.com', '0912345660', 'LH12');
+INSERT INTO
+  `students` (
+    `maSV`,
+    `hoTen`,
+    `gioiTinh`,
+    `namSinh`,
+    `diaChi`,
+    `email`,
+    `sdt`,
+    `maLop`
+  )
+VALUES
+  (
+    'SV001',
+    'Luong Ngoc Thanh',
+    'Nam',
+    2004,
+    'B1-101',
+    'sv001@gmail.com',
+    '0987651234',
+    'LH09'
+  ),
+  (
+    'sv01',
+    'Trần Văn Nam',
+    'Nam',
+    2004,
+    'Hà Nội',
+    'vannam@student.edu.vn',
+    '0812345678',
+    'LH01'
+  ),
+  (
+    'sv02',
+    'Nguyễn Thị Mai',
+    'Nữ',
+    2004,
+    'Hải Phòng',
+    'thimai@student.edu.vn',
+    '0823456789',
+    'LH01'
+  ),
+  (
+    'sv03',
+    'Lê Minh Quân',
+    'Nam',
+    2004,
+    'Đà Nẵng',
+    'minhquan@student.edu.vn',
+    '0834567890',
+    'LH02'
+  ),
+  (
+    'sv04',
+    'Phạm Hồng Nhung',
+    'Nữ',
+    2004,
+    'Quảng Ninh',
+    'hongnhung@student.edu.vn',
+    '0845678901',
+    'LH03'
+  ),
+  (
+    'sv05',
+    'Hoàng Đình Tú',
+    'Nam',
+    2003,
+    'Nghệ An',
+    'dinhtu@student.edu.vn',
+    '0856789012',
+    'LH04'
+  ),
+  (
+    'sv06',
+    'Vũ Phương Thảo',
+    'Nữ',
+    2004,
+    'Thanh Hóa',
+    'phuongthao@student.edu.vn',
+    '0867890123',
+    'LH05'
+  ),
+  (
+    'sv07',
+    'Nguyễn Tiến Đạt',
+    'Nam',
+    2004,
+    'Hà Nội',
+    'tiendat@student.edu.vn',
+    '0878901234',
+    'LH06'
+  ),
+  (
+    'sv08',
+    'Bùi Thúy Quỳnh',
+    'Nữ',
+    2003,
+    'Nam Định',
+    'thuyquynh@student.edu.vn',
+    '0889012345',
+    'LH07'
+  ),
+  (
+    'sv09',
+    'Ngô Quốc Khánh',
+    'Nam',
+    2004,
+    'Thái Bình',
+    'quockhanh@student.edu.vn',
+    '0890123456',
+    'LH08'
+  ),
+  (
+    'sv10',
+    'Đặng Bảo Trâm',
+    'Nữ',
+    2004,
+    'Cần Thơ',
+    'baotram@student.edu.vn',
+    '0801234567',
+    'LH09'
+  ),
+  (
+    'sv11',
+    'Trần Công Lý',
+    'Nam',
+    2004,
+    'Hà Nội',
+    'congly@student.edu.vn',
+    '0899111222',
+    'LH11'
+  ),
+  (
+    'sv12',
+    'Phạm Quỳnh Án',
+    'Nữ',
+    2004,
+    'Hải Phòng',
+    'quynhan@student.edu.vn',
+    '0899111333',
+    'LH11'
+  ),
+  (
+    'sv13',
+    'Nguyễn Tòa Án',
+    'Nam',
+    2003,
+    'Đà Nẵng',
+    'toaan@student.edu.vn',
+    '0899111444',
+    'LH12'
+  ),
+  (
+    'sv14',
+    'Lê Cảnh Sát',
+    'Nam',
+    2004,
+    'Nghệ An',
+    'canhsat@student.edu.vn',
+    '0899111555',
+    'LH12'
+  ),
+  (
+    'sv15',
+    'Hoàng Biện Hộ',
+    'Nữ',
+    2004,
+    'Hồ Chí Minh',
+    'bienho@student.edu.vn',
+    '0899111666',
+    'LH09'
+  ),
+  (
+    'sv16',
+    'Võ Vô Tội',
+    'Nam',
+    2005,
+    'Cần Thơ',
+    'votoi@student.edu.vn',
+    '0899111777',
+    'LH09'
+  ),
+  (
+    'sv17',
+    'Nguyễn Văn An',
+    'Nam',
+    2005,
+    'Hà Nội',
+    'an.nv@gmail.com',
+    '0912345617',
+    'LH12'
+  ),
+  (
+    'sv18',
+    'Trần Thị Bình',
+    'Nữ',
+    2005,
+    'Hải Phòng',
+    'binh.tt@gmail.com',
+    '0912345618',
+    'LH12'
+  ),
+  (
+    'sv19',
+    'Lê Hoàng Cường',
+    'Nam',
+    2005,
+    'Đà Nẵng',
+    'cuong.lh@gmail.com',
+    '0912345619',
+    'LH12'
+  ),
+  (
+    'sv20',
+    'Phạm Hồng Dung',
+    'Nữ',
+    2005,
+    'TP HCM',
+    'dung.ph@gmail.com',
+    '0912345620',
+    'LH12'
+  ),
+  (
+    'sv21',
+    'Hoàng Minh Đức',
+    'Nam',
+    2005,
+    'Cần Thơ',
+    'duc.hm@gmail.com',
+    '0912345621',
+    'LH12'
+  ),
+  (
+    'sv22',
+    'Vũ Thị Hoa',
+    'Nữ',
+    2005,
+    'Quảng Ninh',
+    'hoa.vt@gmail.com',
+    '0912345622',
+    'LH12'
+  ),
+  (
+    'sv23',
+    'Phan Văn Hùng',
+    'Nam',
+    2005,
+    'Nghệ An',
+    'hung.pv@gmail.com',
+    '0912345623',
+    'LH12'
+  ),
+  (
+    'sv24',
+    'Đỗ Thu Hà',
+    'Nữ',
+    2005,
+    'Thanh Hóa',
+    'ha.dt@gmail.com',
+    '0912345624',
+    'LH12'
+  ),
+  (
+    'sv25',
+    'Bùi Quang Hải',
+    'Nam',
+    2005,
+    'Hải Dương',
+    'hai.bq@gmail.com',
+    '0912345625',
+    'LH12'
+  ),
+  (
+    'sv26',
+    'Đặng Thị Khánh',
+    'Nữ',
+    2005,
+    'Bắc Ninh',
+    'khanh.dt@gmail.com',
+    '0912345626',
+    'LH12'
+  ),
+  (
+    'sv27',
+    'Ngô Tiến Long',
+    'Nam',
+    2005,
+    'Thừa Thiên Huế',
+    'long.nt@gmail.com',
+    '0912345627',
+    'LH12'
+  ),
+  (
+    'sv28',
+    'Dương Thúy Minh',
+    'Nữ',
+    2005,
+    'Quảng Nam',
+    'minh.dt@gmail.com',
+    '0912345628',
+    'LH12'
+  ),
+  (
+    'sv29',
+    'Lý Văn Nam',
+    'Nam',
+    2005,
+    'Khánh Hòa',
+    'nam.lv@gmail.com',
+    '0912345629',
+    'LH12'
+  ),
+  (
+    'sv30',
+    'Trịnh Thị Nhung',
+    'Nữ',
+    2005,
+    'Bình Dương',
+    'nhung.tt@gmail.com',
+    '0912345630',
+    'LH12'
+  ),
+  (
+    'sv31',
+    'Đoàn Văn Phong',
+    'Nam',
+    2005,
+    'Đồng Nai',
+    'phong.dv@gmail.com',
+    '0912345631',
+    'LH12'
+  ),
+  (
+    'sv32',
+    'Đinh Thị Quỳnh',
+    'Nữ',
+    2005,
+    'Long An',
+    'quynh.dt@gmail.com',
+    '0912345632',
+    'LH12'
+  ),
+  (
+    'sv33',
+    'Lâm Minh Quân',
+    'Nam',
+    2005,
+    'Tiền Giang',
+    'quan.lm@gmail.com',
+    '0912345633',
+    'LH12'
+  ),
+  (
+    'sv34',
+    'Phùng Bảo Ngọc',
+    'Nữ',
+    2005,
+    'Vĩnh Long',
+    'ngoc.pb@gmail.com',
+    '0912345634',
+    'LH12'
+  ),
+  (
+    'sv35',
+    'Tống Văn Sơn',
+    'Nam',
+    2005,
+    'Cà Mau',
+    'son.tv@gmail.com',
+    '0912345635',
+    'LH12'
+  ),
+  (
+    'sv36',
+    'Trương Mai Trang',
+    'Nữ',
+    2005,
+    'Vũng Tàu',
+    'trang.tm@gmail.com',
+    '0912345636',
+    'LH12'
+  ),
+  (
+    'sv37',
+    'Mai Xuân Trường',
+    'Nam',
+    2005,
+    'Nam Định',
+    'truong.mx@gmail.com',
+    '0912345637',
+    'LH12'
+  ),
+  (
+    'sv38',
+    'Hồ Thị Tuyết',
+    'Nữ',
+    2005,
+    'Thái Bình',
+    'tuyet.ht@gmail.com',
+    '0912345638',
+    'LH12'
+  ),
+  (
+    'sv39',
+    'Cao Văn Tuấn',
+    'Nam',
+    2005,
+    'Ninh Bình',
+    'tuan.cv@gmail.com',
+    '0912345639',
+    'LH12'
+  ),
+  (
+    'sv40',
+    'Diệp Thảo Uyên',
+    'Nữ',
+    2005,
+    'Hà Nam',
+    'uyen.dt@gmail.com',
+    '0912345640',
+    'LH12'
+  ),
+  (
+    'sv41',
+    'Đỗ Hoàng Việt',
+    'Nam',
+    2005,
+    'Hưng Yên',
+    'viet.dh@gmail.com',
+    '0912345641',
+    'LH12'
+  ),
+  (
+    'sv42',
+    'Vũ Hải Yến',
+    'Nữ',
+    2005,
+    'Vĩnh Phúc',
+    'yen.vh@gmail.com',
+    '0912345642',
+    'LH12'
+  ),
+  (
+    'sv43',
+    'Nguyễn Đình Anh',
+    'Nam',
+    2005,
+    'Phú Thọ',
+    'anh.nd@gmail.com',
+    '0912345643',
+    'LH12'
+  ),
+  (
+    'sv44',
+    'Trần Huyền Châu',
+    'Nữ',
+    2005,
+    'Bắc Giang',
+    'chau.th@gmail.com',
+    '0912345644',
+    'LH12'
+  ),
+  (
+    'sv45',
+    'Lê Quốc Duy',
+    'Nam',
+    2005,
+    'Lạng Sơn',
+    'duy.lq@gmail.com',
+    '0912345645',
+    'LH12'
+  ),
+  (
+    'sv46',
+    'Phạm Thu Giang',
+    'Nữ',
+    2005,
+    'Sơn La',
+    'giang.pt@gmail.com',
+    '0912345646',
+    'LH12'
+  ),
+  (
+    'sv47',
+    'Hoàng Gia Huy',
+    'Nam',
+    2005,
+    'Lào Cai',
+    'huy.hg@gmail.com',
+    '0912345647',
+    'LH12'
+  ),
+  (
+    'sv48',
+    'Vũ Minh Khuê',
+    'Nữ',
+    2005,
+    'Yên Bái',
+    'khue.vm@gmail.com',
+    '0912345648',
+    'LH12'
+  ),
+  (
+    'sv49',
+    'Phan Thanh Liêm',
+    'Nam',
+    2005,
+    'Hòa Bình',
+    'liem.pt@gmail.com',
+    '0912345649',
+    'LH12'
+  ),
+  (
+    'sv50',
+    'Đỗ Khánh Linh',
+    'Nữ',
+    2005,
+    'Thái Nguyên',
+    'linh.dk@gmail.com',
+    '0912345650',
+    'LH12'
+  ),
+  (
+    'sv51',
+    'Bùi Đức Mạnh',
+    'Nam',
+    2005,
+    'Tuyên Quang',
+    'manh.bd@gmail.com',
+    '0912345651',
+    'LH12'
+  ),
+  (
+    'sv52',
+    'Đặng Hồng Nga',
+    'Nữ',
+    2005,
+    'Cao Bằng',
+    'nga.dh@gmail.com',
+    '0912345652',
+    'LH12'
+  ),
+  (
+    'sv53',
+    'Ngô Chí Phát',
+    'Nam',
+    2005,
+    'Hà Giang',
+    'phat.nc@gmail.com',
+    '0912345653',
+    'LH12'
+  ),
+  (
+    'sv54',
+    'Dương Minh Phương',
+    'Nữ',
+    2005,
+    'Lai Châu',
+    'phuong.dm@gmail.com',
+    '0912345654',
+    'LH12'
+  ),
+  (
+    'sv55',
+    'Lý Thành Tâm',
+    'Nam',
+    2005,
+    'Điện Biên',
+    'tam.lt@gmail.com',
+    '0912345655',
+    'LH12'
+  ),
+  (
+    'sv56',
+    'Trịnh Diệp Thảo',
+    'Nữ',
+    2005,
+    'Gia Lai',
+    'thao.td@gmail.com',
+    '0912345656',
+    'LH12'
+  ),
+  (
+    'sv57',
+    'Đoàn Anh Tú',
+    'Nam',
+    2005,
+    'Đắk Lắk',
+    'tu.da@gmail.com',
+    '0912345657',
+    'LH12'
+  ),
+  (
+    'sv58',
+    'Đinh Cẩm Vân',
+    'Nữ',
+    2005,
+    'Lâm Đồng',
+    'van.dc@gmail.com',
+    '0912345658',
+    'LH12'
+  ),
+  (
+    'sv59',
+    'Lâm Quốc Vũ',
+    'Nam',
+    2005,
+    'Bình Phước',
+    'vu.lq@gmail.com',
+    '0912345659',
+    'LH12'
+  ),
+  (
+    'sv60',
+    'Phùng Kim Xuân',
+    'Nữ',
+    2005,
+    'Tây Ninh',
+    'xuan.pk@gmail.com',
+    '0912345660',
+    'LH12'
+  );
 
 --
 -- Indexes for dumped tables
 --
-
 --
 -- Indexes for table `accounts`
 --
-ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`username`);
+ALTER TABLE `accounts` ADD PRIMARY KEY (`username`);
 
 --
 -- Indexes for table `classes`
 --
-ALTER TABLE `classes`
-  ADD PRIMARY KEY (`maLop`),
-  ADD KEY `FK_Class_Faculty` (`maKhoa`),
-  ADD KEY `FK_Class_Lecturer` (`maGV`);
+ALTER TABLE `classes` ADD PRIMARY KEY (`maLop`),
+ADD KEY `FK_Class_Faculty` (`maKhoa`),
+ADD KEY `FK_Class_Lecturer` (`maGV`);
 
 --
 -- Indexes for table `class_schedules`
 --
-ALTER TABLE `class_schedules`
-  ADD PRIMARY KEY (`schedule_id`),
-  ADD KEY `FK_Schedule_CC` (`maLHP`),
-  ADD KEY `FK_Schedule_Room` (`room_id`),
-  ADD KEY `idx_time_check` (`day_of_week`,`start_period`,`num_periods`),
-  ADD KEY `idx_room_time` (`room_id`,`day_of_week`);
+ALTER TABLE `class_schedules` ADD PRIMARY KEY (`schedule_id`),
+ADD KEY `FK_Schedule_CC` (`maLHP`),
+ADD KEY `FK_Schedule_Room` (`room_id`),
+ADD KEY `idx_time_check` (`day_of_week`, `start_period`, `num_periods`),
+ADD KEY `idx_room_time` (`room_id`, `day_of_week`);
 
 --
 -- Indexes for table `courseclasses`
 --
-ALTER TABLE `courseclasses`
-  ADD PRIMARY KEY (`maLHP`),
-  ADD KEY `FK_CC_Course` (`maMH`),
-  ADD KEY `FK_CC_Semester` (`maHK`),
-  ADD KEY `FK_CC_Lecturer` (`maGV`);
+ALTER TABLE `courseclasses` ADD PRIMARY KEY (`maLHP`),
+ADD KEY `FK_CC_Course` (`maMH`),
+ADD KEY `FK_CC_Semester` (`maHK`),
+ADD KEY `FK_CC_Lecturer` (`maGV`);
 
 --
 -- Indexes for table `courses`
 --
-ALTER TABLE `courses`
-  ADD PRIMARY KEY (`maMH`),
-  ADD KEY `FK_Course_Faculty` (`maKhoa`);
+ALTER TABLE `courses` ADD PRIMARY KEY (`maMH`),
+ADD KEY `FK_Course_Faculty` (`maKhoa`);
 
 --
 -- Indexes for table `faculties`
 --
-ALTER TABLE `faculties`
-  ADD PRIMARY KEY (`maKhoa`);
+ALTER TABLE `faculties` ADD PRIMARY KEY (`maKhoa`);
 
 --
 -- Indexes for table `grades`
 --
-ALTER TABLE `grades`
-  ADD PRIMARY KEY (`maSV`,`maLHP`),
-  ADD KEY `FK_Grades_CC` (`maLHP`);
+ALTER TABLE `grades` ADD PRIMARY KEY (`maSV`, `maLHP`),
+ADD KEY `FK_Grades_CC` (`maLHP`);
 
 --
 -- Indexes for table `lecturers`
 --
-ALTER TABLE `lecturers`
-  ADD PRIMARY KEY (`maGV`);
+ALTER TABLE `lecturers` ADD PRIMARY KEY (`maGV`);
 
 --
 -- Indexes for table `rooms`
 --
-ALTER TABLE `rooms`
-  ADD PRIMARY KEY (`room_id`),
-  ADD UNIQUE KEY `idx_room_name` (`room_name`);
+ALTER TABLE `rooms` ADD PRIMARY KEY (`room_id`),
+ADD UNIQUE KEY `idx_room_name` (`room_name`);
 
 --
 -- Indexes for table `semesters`
 --
-ALTER TABLE `semesters`
-  ADD PRIMARY KEY (`maHK`);
+ALTER TABLE `semesters` ADD PRIMARY KEY (`maHK`);
 
 --
 -- Indexes for table `students`
 --
-ALTER TABLE `students`
-  ADD PRIMARY KEY (`maSV`),
-  ADD KEY `FK_Student_Class` (`maLop`);
+ALTER TABLE `students` ADD PRIMARY KEY (`maSV`),
+ADD KEY `FK_Student_Class` (`maLop`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
 --
 -- AUTO_INCREMENT for table `class_schedules`
 --
-ALTER TABLE `class_schedules`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+ALTER TABLE `class_schedules` MODIFY `schedule_id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 18;
 
 --
 -- AUTO_INCREMENT for table `courseclasses`
 --
-ALTER TABLE `courseclasses`
-  MODIFY `maLHP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+ALTER TABLE `courseclasses` MODIFY `maLHP` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 17;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
-ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `rooms` MODIFY `room_id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 7;
 
 --
 -- Constraints for dumped tables
 --
-
 --
 -- Constraints for table `classes`
 --
-ALTER TABLE `classes`
-  ADD CONSTRAINT `FK_Class_Faculty` FOREIGN KEY (`maKhoa`) REFERENCES `faculties` (`maKhoa`),
-  ADD CONSTRAINT `FK_Class_Lecturer` FOREIGN KEY (`maGV`) REFERENCES `lecturers` (`maGV`);
+ALTER TABLE `classes` ADD CONSTRAINT `FK_Class_Faculty` FOREIGN KEY (`maKhoa`) REFERENCES `faculties` (`maKhoa`),
+ADD CONSTRAINT `FK_Class_Lecturer` FOREIGN KEY (`maGV`) REFERENCES `lecturers` (`maGV`);
 
 --
 -- Constraints for table `class_schedules`
 --
-ALTER TABLE `class_schedules`
-  ADD CONSTRAINT `FK_Schedule_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_Schedule_Room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`);
+ALTER TABLE `class_schedules` ADD CONSTRAINT `FK_Schedule_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`) ON DELETE CASCADE,
+ADD CONSTRAINT `FK_Schedule_Room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`);
 
 --
 -- Constraints for table `courseclasses`
 --
-ALTER TABLE `courseclasses`
-  ADD CONSTRAINT `FK_CC_Course` FOREIGN KEY (`maMH`) REFERENCES `courses` (`maMH`),
-  ADD CONSTRAINT `FK_CC_Lecturer` FOREIGN KEY (`maGV`) REFERENCES `lecturers` (`maGV`),
-  ADD CONSTRAINT `FK_CC_Semester` FOREIGN KEY (`maHK`) REFERENCES `semesters` (`maHK`);
+ALTER TABLE `courseclasses` ADD CONSTRAINT `FK_CC_Course` FOREIGN KEY (`maMH`) REFERENCES `courses` (`maMH`),
+ADD CONSTRAINT `FK_CC_Lecturer` FOREIGN KEY (`maGV`) REFERENCES `lecturers` (`maGV`),
+ADD CONSTRAINT `FK_CC_Semester` FOREIGN KEY (`maHK`) REFERENCES `semesters` (`maHK`);
 
 --
 -- Constraints for table `courses`
 --
-ALTER TABLE `courses`
-  ADD CONSTRAINT `FK_Course_Faculty` FOREIGN KEY (`maKhoa`) REFERENCES `faculties` (`maKhoa`);
+ALTER TABLE `courses` ADD CONSTRAINT `FK_Course_Faculty` FOREIGN KEY (`maKhoa`) REFERENCES `faculties` (`maKhoa`);
 
 --
 -- Constraints for table `grades`
 --
-ALTER TABLE `grades`
-  ADD CONSTRAINT `FK_Grades_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`),
-  ADD CONSTRAINT `FK_Grades_Student` FOREIGN KEY (`maSV`) REFERENCES `students` (`maSV`);
+ALTER TABLE `grades` ADD CONSTRAINT `FK_Grades_CC` FOREIGN KEY (`maLHP`) REFERENCES `courseclasses` (`maLHP`),
+ADD CONSTRAINT `FK_Grades_Student` FOREIGN KEY (`maSV`) REFERENCES `students` (`maSV`);
 
 --
 -- Constraints for table `students`
 --
-ALTER TABLE `students`
-  ADD CONSTRAINT `FK_Student_Class` FOREIGN KEY (`maLop`) REFERENCES `classes` (`maLop`);
+ALTER TABLE `students` ADD CONSTRAINT `FK_Student_Class` FOREIGN KEY (`maLop`) REFERENCES `classes` (`maLop`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
