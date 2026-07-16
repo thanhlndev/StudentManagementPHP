@@ -16,7 +16,7 @@ require_once 'includes/topbar.php';
         'dashboard',
         'faculties',
         'courses',
-        'teachers',
+        'lecturers',
         'semesters',
         'classes',
         'course_classes',
@@ -27,6 +27,7 @@ require_once 'includes/topbar.php';
         'profile',
         'rooms',
         'course_class_detail',
+        'class_schedules',
     ];
 
     if (in_array($page, $allowed_pages) && file_exists($page . '.php')) {

@@ -11,29 +11,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'add') {
             $stmt = $pdo->prepare("INSERT INTO Classes (maLop, tenLop, email, maKhoa, maGV) VALUES (:id, :ten, :email, :khoa, :gv)");
             $stmt->execute([
-                'id'    => $_POST['maLop'],
-                'ten'   => $_POST['tenLop'],
+                'id' => $_POST['maLop'],
+                'ten' => $_POST['tenLop'],
                 'email' => $_POST['email'],
-                'khoa'  => $_POST['maKhoa'],
-                'gv'    => $_POST['maGV']
+                'khoa' => $_POST['maKhoa'],
+                'gv' => $_POST['maGV']
             ]);
             $_SESSION['msg'] = "Thêm Lớp học thành công!";
             $_SESSION['msg_type'] = "success";
-        } 
-        elseif ($action === 'edit') {
+        } elseif ($action === 'edit') {
             $sql = "UPDATE Classes SET tenLop=:ten, email=:email, maKhoa=:khoa, maGV=:gv WHERE maLop=:id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                'id'    => $_POST['maLop'],
-                'ten'   => $_POST['tenLop'],
+                'id' => $_POST['maLop'],
+                'ten' => $_POST['tenLop'],
                 'email' => $_POST['email'],
-                'khoa'  => $_POST['maKhoa'],
-                'gv'    => $_POST['maGV']
+                'khoa' => $_POST['maKhoa'],
+                'gv' => $_POST['maGV']
             ]);
             $_SESSION['msg'] = "Cập nhật thông tin Lớp học thành công!";
             $_SESSION['msg_type'] = "success";
-        }
-        elseif ($action === 'delete') {
+        } elseif ($action === 'delete') {
             $stmt = $pdo->prepare("DELETE FROM Classes WHERE maLop = ?");
             $stmt->execute([$_POST['maLop']]);
             $_SESSION['msg'] = "Xóa Lớp học thành công!";
@@ -43,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['msg'] = "Lỗi CSDL: " . $e->getMessage();
         $_SESSION['msg_type'] = "danger";
     }
-    
+
     // Giữ lại bộ lọc sau khi Thêm/Sửa/Xóa để không bị văng khỏi trang hiện tại
     $current_filter = $_POST['current_filter_khoa'] ?? '';
     header("Location: index.php?page=classes&filter_khoa=" . urlencode($current_filter));
@@ -58,18 +56,19 @@ $filter_khoa = $_GET['filter_khoa'] ?? ''; // Bắt biến filter_khoa từ URL 
 
 // --- LẤY DỮ LIỆU CHO CÁC THẺ <SELECT> ---
 $facultiesList = $pdo->query("SELECT maKhoa, tenKhoa FROM Faculties")->fetchAll();
-$teachersList = $pdo->query("SELECT maGV, hoTenGV FROM Teachers")->fetchAll();
+$LecturersList = $pdo->query("SELECT maGV, hoTenGV FROM lecturers")->fetchAll();
 
 // --- CẤU HÌNH PHÂN TRANG ---
 $limit = 10;
-$p = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-if ($p < 1) $p = 1;
-$offset = (int)(($p - 1) * $limit);
+$p = isset($_GET['p']) ? (int) $_GET['p'] : 1;
+if ($p < 1)
+    $p = 1;
+$offset = (int) (($p - 1) * $limit);
 
 $baseSelect = "SELECT c.maLop, c.tenLop, c.email, c.maKhoa, c.maGV, f.tenKhoa, t.hoTenGV 
                FROM Classes c
                LEFT JOIN Faculties f ON c.maKhoa = f.maKhoa
-               LEFT JOIN Teachers t ON c.maGV = t.maGV";
+               LEFT JOIN Lecturers t ON c.maGV = t.maGV";
 
 // Xây dựng điều kiện WHERE động
 $whereClauses = [];
@@ -95,7 +94,7 @@ if (count($whereClauses) > 0) {
 // Đếm tổng số dòng
 $countSql = "SELECT COUNT(*) FROM Classes c
              LEFT JOIN Faculties f ON c.maKhoa = f.maKhoa
-             LEFT JOIN Teachers t ON c.maGV = t.maGV" . $whereString;
+             LEFT JOIN Lecturers t ON c.maGV = t.maGV" . $whereString;
 $countStmt = $pdo->prepare($countSql);
 $countStmt->execute($params);
 $totalRows = $countStmt->fetchColumn();
@@ -111,7 +110,8 @@ $totalPages = ceil($totalRows / $limit);
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Quản lý Lớp Sinh hoạt</h1>
-    <button href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#addModal">
+    <button href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"
+        data-target="#addModal">
         <i class="fas fa-plus fa-sm text-white-50"></i> Thêm Lớp Mới
     </button>
 </div>
@@ -134,7 +134,7 @@ $totalPages = ceil($totalRows / $limit);
         <div class="col-xl-9 col-lg-10 px-0">
             <form method="GET" action="index.php" class="mb-0 row no-gutters align-items-center">
                 <input type="hidden" name="page" value="classes">
-                
+
                 <div class="col-md-5 pr-md-2 mb-2 mb-md-0">
                     <select name="filter_khoa" class="form-control font-weight-bold" onchange="this.form.submit()">
                         <option value="">-- Tất cả các Khoa --</option>
@@ -148,7 +148,8 @@ $totalPages = ceil($totalRows / $limit);
 
                 <div class="col-md-7">
                     <div class="input-group w-100">
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm theo mã lớp, tên lớp hoặc GV..." value="<?= htmlspecialchars($keyword) ?>">
+                        <input type="text" name="keyword" class="form-control"
+                            placeholder="Tìm theo mã lớp, tên lớp hoặc GV..." value="<?= htmlspecialchars($keyword) ?>">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                 <i class="fas fa-search"></i>
@@ -177,54 +178,62 @@ $totalPages = ceil($totalRows / $limit);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(empty($classes)): ?>
-                        <tr><td colspan="6" class="text-center py-4">Không có lớp nào phù hợp</td></tr>
+                    <?php if (empty($classes)): ?>
+                        <tr>
+                            <td colspan="6" class="text-center py-4">Không có lớp nào phù hợp</td>
+                        </tr>
                     <?php else: ?>
                         <?php foreach ($classes as $c): ?>
-                        <tr>
-                            <td class="font-weight-bold text-primary"><?= htmlspecialchars($c['maLop']) ?></td>
-                            <td><?= htmlspecialchars($c['tenLop']) ?></td>
-                            <td><span class="badge badge-info p-2"><?= htmlspecialchars($c['tenKhoa'] ?? 'Trống') ?></span></td>
-                            <td><?= htmlspecialchars($c['hoTenGV'] ?? 'Trống') ?></td>
-                            <td><?= htmlspecialchars($c['email']) ?></td>
-                            <td class="text-center text-nowrap">
-                                <button type="button" class="btn btn-warning btn-sm mr-1 shadow-sm" 
+                            <tr>
+                                <td class="font-weight-bold text-primary"><?= htmlspecialchars($c['maLop']) ?></td>
+                                <td><?= htmlspecialchars($c['tenLop']) ?></td>
+                                <td><span class="badge badge-info p-2"><?= htmlspecialchars($c['tenKhoa'] ?? 'Trống') ?></span>
+                                </td>
+                                <td><?= htmlspecialchars($c['hoTenGV'] ?? 'Trống') ?></td>
+                                <td><?= htmlspecialchars($c['email']) ?></td>
+                                <td class="text-center text-nowrap">
+                                    <button type="button" class="btn btn-warning btn-sm mr-1 shadow-sm"
                                         onclick='openEditModal(<?= json_encode($c, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?>)'>
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="current_filter_khoa" value="<?= htmlspecialchars($filter_khoa) ?>">
-                                    <input type="hidden" name="maLop" value="<?= htmlspecialchars($c['maLop']) ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm shadow-sm" onclick="return confirm('Xóa lớp có thể ảnh hưởng sinh viên thuộc lớp. Xác nhận xóa?')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                </form>
-                            </td>
-                        </tr>
+
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="current_filter_khoa"
+                                            value="<?= htmlspecialchars($filter_khoa) ?>">
+                                        <input type="hidden" name="maLop" value="<?= htmlspecialchars($c['maLop']) ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm shadow-sm"
+                                            onclick="return confirm('Xóa lớp có thể ảnh hưởng sinh viên thuộc lớp. Xác nhận xóa?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        
+
         <?php if ($totalPages > 1): ?>
-        <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-end mb-0">
-                <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $p - 1 ?>">Trước</a>
-                </li>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $i ?>"><?= $i ?></a>
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-end mb-0">
+                    <li class="page-item <?= ($p <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link"
+                            href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $p - 1 ?>">Trước</a>
                     </li>
-                <?php endfor; ?>
-                <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $p + 1 ?>">Sau</a>
-                </li>
-            </ul>
-        </nav>
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= ($i == $p) ? 'active' : '' ?>">
+                            <a class="page-link"
+                                href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="page-item <?= ($p >= $totalPages) ? 'disabled' : '' ?>">
+                        <a class="page-link"
+                            href="?page=classes&keyword=<?= urlencode($keyword) ?>&filter_khoa=<?= urlencode($filter_khoa) ?>&p=<?= $p + 1 ?>">Sau</a>
+                    </li>
+                </ul>
+            </nav>
         <?php endif; ?>
     </div>
 </div>
@@ -234,12 +243,13 @@ $totalPages = ceil($totalRows / $limit);
         <form method="POST" class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title font-weight-bold">Thêm Lớp Mới</h5>
-                <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="action" value="add">
                 <input type="hidden" name="current_filter_khoa" value="<?= htmlspecialchars($filter_khoa) ?>">
-                
+
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label class="font-weight-bold">Mã Lớp</label>
@@ -250,7 +260,7 @@ $totalPages = ceil($totalRows / $limit);
                         <input type="text" class="form-control" name="tenLop" required>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="font-weight-bold">Trực thuộc Khoa</label>
@@ -267,13 +277,15 @@ $totalPages = ceil($totalRows / $limit);
                         <label class="font-weight-bold">Giảng viên Chủ nhiệm</label>
                         <select class="form-control" name="maGV" required>
                             <option value="">-- Chọn Giảng viên --</option>
-                            <?php foreach ($teachersList as $tea): ?>
-                                <option value="<?= htmlspecialchars($tea['maGV']) ?>"><?= htmlspecialchars($tea['hoTenGV']) ?> (<?= htmlspecialchars($tea['maGV']) ?>)</option>
+                            <?php foreach ($LecturersList as $tea): ?>
+                                <option value="<?= htmlspecialchars($tea['maGV']) ?>">
+                                    <?= htmlspecialchars($tea['hoTenGV']) ?> (<?= htmlspecialchars($tea['maGV']) ?>)
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="font-weight-bold">Email Lớp (Nếu có)</label>
                     <input type="email" class="form-control" name="email">
@@ -292,12 +304,13 @@ $totalPages = ceil($totalRows / $limit);
         <form method="POST" class="modal-content">
             <div class="modal-header bg-warning text-dark">
                 <h5 class="modal-title font-weight-bold">Cập nhật Lớp</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="current_filter_khoa" value="<?= htmlspecialchars($filter_khoa) ?>">
-                
+
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label class="font-weight-bold">Mã Lớp</label>
@@ -308,26 +321,29 @@ $totalPages = ceil($totalRows / $limit);
                         <input type="text" class="form-control" name="tenLop" id="edit_tenLop" required>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="font-weight-bold">Trực thuộc Khoa</label>
                         <select class="form-control" name="maKhoa" id="edit_maKhoa" required>
                             <?php foreach ($facultiesList as $fac): ?>
-                                <option value="<?= htmlspecialchars($fac['maKhoa']) ?>"><?= htmlspecialchars($fac['tenKhoa']) ?></option>
+                                <option value="<?= htmlspecialchars($fac['maKhoa']) ?>">
+                                    <?= htmlspecialchars($fac['tenKhoa']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="font-weight-bold">Giảng viên Chủ nhiệm</label>
                         <select class="form-control" name="maGV" id="edit_maGV" required>
-                            <?php foreach ($teachersList as $tea): ?>
-                                <option value="<?= htmlspecialchars($tea['maGV']) ?>"><?= htmlspecialchars($tea['hoTenGV']) ?> (<?= htmlspecialchars($tea['maGV']) ?>)</option>
+                            <?php foreach ($LecturersList as $tea): ?>
+                                <option value="<?= htmlspecialchars($tea['maGV']) ?>">
+                                    <?= htmlspecialchars($tea['hoTenGV']) ?> (<?= htmlspecialchars($tea['maGV']) ?>)
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="font-weight-bold">Email Lớp</label>
                     <input type="email" class="form-control" name="email" id="edit_email">
@@ -342,12 +358,12 @@ $totalPages = ceil($totalRows / $limit);
 </div>
 
 <script>
-function openEditModal(data) {
-    document.getElementById('edit_maLop').value = data.maLop;
-    document.getElementById('edit_tenLop').value = data.tenLop;
-    document.getElementById('edit_email').value = data.email;
-    document.getElementById('edit_maKhoa').value = data.maKhoa;
-    document.getElementById('edit_maGV').value = data.maGV;
-    $('#editModal').modal('show');
-}
+    function openEditModal(data) {
+        document.getElementById('edit_maLop').value = data.maLop;
+        document.getElementById('edit_tenLop').value = data.tenLop;
+        document.getElementById('edit_email').value = data.email;
+        document.getElementById('edit_maKhoa').value = data.maKhoa;
+        document.getElementById('edit_maGV').value = data.maGV;
+        $('#editModal').modal('show');
+    }
 </script>

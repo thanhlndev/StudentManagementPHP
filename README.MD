@@ -13,7 +13,7 @@ Hệ thống Quản lý Đào tạo Tín chỉ được thiết kế nhằm tố
 
 Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoại (Foreign Keys) để đảm bảo tính toàn vẹn dữ liệu:
 
-- **Module Nhân sự & Đơn vị:** Accounts, Faculties, Teachers, Classes, Students.
+- **Module Nhân sự & Đơn vị:** Accounts, Faculties, Lectures, Classes, Students.
 
 - **Module Đào tạo:** Courses, Semesters, CourseClasses.
 
@@ -25,16 +25,18 @@ Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoạ
 
 1. **Admin:** Quản trị dữ liệu tập trung, phân tích Dashboard, quản lý phòng học và lịch học (xếp lịch theo tài nguyên).
 
-2. **Teacher:** Quản lý lớp học phần được phân công, nhập điểm và theo dõi trạng thái khóa/mở điểm.
+2. **Lecturer(Giảng viên):** Quản lý lớp học phần được phân công, nhập điểm và theo dõi trạng thái khóa/mở điểm.
 
-3. **Student:** Đăng ký học phần, xem kết quả học tập, tính toán GPA và theo dõi thời khóa biểu cá nhân với bộ lọc trùng lịch thông minh.
+3. **Student(Sinh viên):** Đăng ký học phần, xem kết quả học tập, tính toán GPA và theo dõi thời khóa biểu cá nhân với bộ lọc trùng lịch thông minh.
 
 ## Thiết lập môi trường
 
 1. Yêu cầu **XAMPP** (hoặc môi trường LAMP/WAMP tương tự).
-2. Import file `qlsv.sql` vào MySQL.
-3. Cấu hình `config/database.php` với thông tin kết nối DB của bạn.
-4. Truy cập hệ thống qua: `http://localhost/StudentManagement/`
+2. gỉt clone https://github.com/thanhlndev/StudentManagementPHP.git
+   hoặc Download Zip, giải nén trong thư mục xampp/htdocs/
+3. Import file `qlsv.sql` vào MySQL.
+4. Cấu hình `config/database.php` với thông tin kết nối DB của bạn.
+5. Truy cập hệ thống qua: `http://localhost/StudentManagement/`
 
 ## Best Practices đã áp dụng
 
@@ -49,3 +51,19 @@ Hệ thống sử dụng các bảng liên kết chặt chẽ với khóa ngoạ
 **Security:** Mã hóa mật khẩu sử dụng password_hash() (Bcrypt).
 
 **UX/UI:** Giao diện Responsive tích hợp công cụ lọc thông minh theo Khoa và bộ lọc thời gian thực.
+
+**Tài khoản test:**
+admin: username: admin
+password: 612435
+
+GV01: username: gv01
+password: 612435
+
+GV09: username: gv09
+password: 123456
+
+SV01: username: sv01
+password: 612435
+
+SV11: username: sv11
+password: 123456

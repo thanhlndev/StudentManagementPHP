@@ -1,0 +1,29 @@
+StudentManagementPHP/
+├── admin/                  # Phân hệ Quản trị viên (Admin)
+│   ├── includes/   # Giao diện dùng chung (header.php, footer.php, sidebar.php)
+│   ├── index.php           # Bộ định tuyến (Front Controller) của Admin
+│   ├── course_classes.php  # Module quản lý Lớp học phần
+│   └── ...                 # Các module quản lý khác (students.php, courses.php,...)
+├── auth/                   # Phân hệ Xác thực và Phiên làm việc
+│   ├── login.php           # Cổng đăng nhập trung tâm
+│   ├── logout.php          # Xử lý hủy Session (Đăng xuất)
+│   └── session_check.php   # Middleware kiểm tra Session tập trung
+├── config/                 # Thư mục cấu hình lõi hệ thống
+│   └── database.php        # Thiết lập kết nối CSDL bằng PDO an toàn
+├── css/                    # Tài nguyên định dạng (Cascading Style Sheets)
+├── img/                    # Tài nguyên hình ảnh
+├── js/                     # Tài nguyên kịch bản (JavaScript)
+├── lecturer/               # Phân hệ Giảng viên (Lecturer)
+│   ├── includes/           # Giao diện dùng chung của Giảng viên
+│   ├── index.php           # Bộ định tuyến của Giảng viên
+│   ├── grades.php          # Module xem danh sách lớp học phần
+│   └── grade_detail.php    # Module nhập điểm chi tiết
+├── student/                # Phân hệ Sinh viên (Student)
+│   ├── includes/           # Giao diện dùng chung của Sinh viên
+│   ├── index.php           # Bộ định tuyến của Sinh viên
+│   ├── course_classes.php  # Module xử lý Đăng ký học phần
+│   ├── timetable.php       # Module xem Thời khóa biểu cá nhân
+│   └── grades.php          # Module xem Kết quả học tập
+├── vendor/                 # Thư viện mã nguồn bên thứ ba (Third-party)
+├── index.php               # Cổng điều hướng gốc của toàn bộ ứng dụng
+└── qlsv.sql                # File sao lưu cấu trúc và dữ liệu CSDL (Dump file)

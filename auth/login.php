@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // MỞ NGOẶC DÒNG 17 NẰM Ở ĐÂY
-    if (!empty($username) && !empty($password)) { 
+    if (!empty($username) && !empty($password)) {
         try {
             // Sử dụng Prepared Statement
             $stmt = $pdo->prepare("SELECT * FROM Accounts WHERE username = ? LIMIT 1");
@@ -23,36 +23,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $account = $stmt->fetch();
 
             if ($account && password_verify($password, $account['password'])) {
-                
-                if ((int)$account['isActive'] === 1) {
-                    
+
+                if ((int) $account['isActive'] === 1) {
+
                     // 1. Đổi ID session và lưu Session
                     session_regenerate_id(true);
                     $_SESSION['user'] = [
                         'username' => $account['username'],
-                        'role'     => $account['role']
+                        'role' => $account['role']
                     ];
 
                     // 2. Lưu Cookie an toàn
                     $cookieData = [
                         'username' => $account['username'],
-                        'role'     => $account['role']
+                        'role' => $account['role']
                     ];
                     $cookieValue = json_encode($cookieData);
                     $expireTime = time() + (30 * 24 * 3600);
 
                     setcookie('logged_in_user', $cookieValue, [
-                        'expires'  => $expireTime,
-                        'path'     => '/',
-                        'domain'   => '', 
-                        'secure'   => false, // Đổi thành true khi chạy HTTPS thật
+                        'expires' => $expireTime,
+                        'path' => '/',
+                        'domain' => '',
+                        'secure' => false, // Đổi thành true khi chạy HTTPS thật
                         'httponly' => true,
                         'samesite' => 'Lax'
                     ]);
 
                     // Điều hướng
                     redirectByRole($account['role']);
-                    
+
                 } else {
                     $error = 'Tài khoản của bạn hiện đang bị khóa!';
                 }
@@ -68,13 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } // ĐÓNG NGOẶC CHO IF($_SERVER['REQUEST_METHOD'] === 'POST')
 
 // Hàm phụ trợ điều hướng theo vai trò
-function redirectByRole($role) {
+function redirectByRole($role)
+{
     switch ($role) {
         case 'Admin':
             header("Location: ../admin/index.php");
             break;
-        case 'Teacher':
-            header("Location: ../teacher/index.php");
+        case 'Lecturer':
+            header("Location: ../lecturer/index.php");
             break;
         case 'Student':
             header("Location: ../student/index.php");
@@ -87,6 +88,7 @@ function redirectByRole($role) {
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -95,6 +97,7 @@ function redirectByRole($role) {
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gradient-primary">
     <div class="container">
         <div class="row justify-content-center">
@@ -105,19 +108,23 @@ function redirectByRole($role) {
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4 font-weight-bold">CỔNG THÔNG TIN ĐÀO TẠO</h1>
                             </div>
-                            
+
                             <?php if (!empty($error)): ?>
-                                <div class="alert alert-danger shadow-sm text-center small"><?= htmlspecialchars($error) ?></div>
+                                <div class="alert alert-danger shadow-sm text-center small"><?= htmlspecialchars($error) ?>
+                                </div>
                             <?php endif; ?>
 
                             <form class="user" method="POST" action="login.php">
                                 <div class="form-group">
-                                    <input type="text" name="username" class="form-control form-control-user" placeholder="Tên đăng nhập (Mã số)..." required autocomplete="username">
+                                    <input type="text" name="username" class="form-control form-control-user"
+                                        placeholder="Tên đăng nhập (Mã số)..." required autocomplete="username">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="password" class="form-control form-control-user" placeholder="Mật khẩu..." required autocomplete="current-password">
+                                    <input type="password" name="password" class="form-control form-control-user"
+                                        placeholder="Mật khẩu..." required autocomplete="current-password">
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block font-weight-bold shadow">
+                                <button type="submit"
+                                    class="btn btn-primary btn-user btn-block font-weight-bold shadow">
                                     ĐĂNG NHẬP
                                 </button>
                                 <hr>
@@ -136,4 +143,5 @@ function redirectByRole($role) {
         </div>
     </div>
 </body>
+
 </html>

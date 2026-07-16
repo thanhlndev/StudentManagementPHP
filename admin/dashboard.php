@@ -4,7 +4,7 @@ global $pdo;
 // Tầng 1: Lấy dữ liệu Macro
 $stats = [
     'sv' => $pdo->query("SELECT COUNT(*) FROM Students")->fetchColumn(),
-    'gv' => $pdo->query("SELECT COUNT(*) FROM Teachers")->fetchColumn(),
+    'gv' => $pdo->query("SELECT COUNT(*) FROM lecturers")->fetchColumn(),
     'lhp' => $pdo->query("SELECT COUNT(*) FROM CourseClasses")->fetchColumn(),
     'can_chot' => $pdo->query("SELECT COUNT(*) FROM CourseClasses WHERE isLocked = 0")->fetchColumn()
 ];
@@ -31,25 +31,27 @@ $alerts = $pdo->query("
 ?>
 
 <div class="row">
-    <?php 
+    <?php
     $widgets = [
         ['Tổng SV', $stats['sv'], 'primary', 'user-graduate'],
         ['Tổng GV', $stats['gv'], 'success', 'chalkboard-teacher'],
         ['Lớp HP', $stats['lhp'], 'info', 'book'],
         ['Chưa chốt', $stats['can_chot'], 'warning', 'exclamation-triangle']
     ];
-    foreach($widgets as $w): ?>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-<?= $w[2] ?> shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col"><div class="text-xs font-weight-bold text-<?= $w[2] ?> text-uppercase"><?= $w[0] ?></div>
-                    <div class="h5 font-weight-bold text-gray-800"><?= $w[1] ?></div></div>
-                    <div class="col-auto"><i class="fas fa-<?= $w[3] ?> fa-2x text-gray-300"></i></div>
+    foreach ($widgets as $w): ?>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-<?= $w[2] ?> shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="text-xs font-weight-bold text-<?= $w[2] ?> text-uppercase"><?= $w[0] ?></div>
+                            <div class="h5 font-weight-bold text-gray-800"><?= $w[1] ?></div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-<?= $w[3] ?> fa-2x text-gray-300"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>
 
@@ -57,19 +59,24 @@ $alerts = $pdo->query("
 <div class="row">
     <div class="col-xl-8">
         <div class="card shadow mb-4">
-            <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Phân bổ Sinh viên theo Khoa</h6></div>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Phân bổ Sinh viên theo Khoa</h6>
+            </div>
             <div class="card-body"><canvas id="facultyChart" height="100"></canvas></div>
         </div>
     </div>
     <div class="col-xl-4">
         <div class="card shadow mb-4">
-            <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-danger">Cảnh báo: Lớp tỷ lệ trượt cao</h6></div>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">Cảnh báo: Lớp tỷ lệ trượt cao</h6>
+            </div>
             <div class="card-body p-0">
                 <ul class="list-group list-group-flush">
-                    <?php foreach($alerts as $a): ?>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <?= $a['tenMH'] ?> <span class="badge badge-danger"><?= round(($a['failCount']/$a['total'])*100) ?>% trượt</span>
-                    </li>
+                    <?php foreach ($alerts as $a): ?>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <?= $a['tenMH'] ?> <span
+                                class="badge badge-danger"><?= round(($a['failCount'] / $a['total']) * 100) ?>% trượt</span>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -78,23 +85,25 @@ $alerts = $pdo->query("
 </div>
 
 <script>
-// Chờ DOM load xong mới vẽ
-document.addEventListener("DOMContentLoaded", function() {
-    const ctx = document.getElementById('facultyChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [<?php foreach($facultyData as $f) echo "'" . addslashes($f['tenKhoa']) . "', "; ?>],
-            datasets: [{
-                label: 'Số sinh viên',
-                data: [<?php foreach($facultyData as $f) echo $f['total'] . ", "; ?>],
-                backgroundColor: '#4e73df'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+    // Chờ DOM load xong mới vẽ
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('facultyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [<?php foreach ($facultyData as $f)
+                    echo "'" . addslashes($f['tenKhoa']) . "', "; ?>],
+                datasets: [{
+                    label: 'Số sinh viên',
+                    data: [<?php foreach ($facultyData as $f)
+                        echo $f['total'] . ", "; ?>],
+                    backgroundColor: '#4e73df'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
     });
-});
 </script>

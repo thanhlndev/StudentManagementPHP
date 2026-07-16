@@ -11,12 +11,13 @@ if ($maLHP === 0) {
 }
 
 // Lấy thông tin cơ bản của Lớp học phần để dùng chung
+// SỬA LỖI Ở ĐÂY: JOIN lecturers thay vì Lecturers (đảm bảo viết thường)
 $stmtInfo = $pdo->prepare("
     SELECT cc.*, c.tenMH, s.tenHK, t.hoTenGV, t.maGV 
     FROM courseclasses cc
     JOIN courses c ON cc.maMH = c.maMH
     JOIN semesters s ON cc.maHK = s.maHK
-    JOIN teachers t ON cc.maGV = t.maGV
+    JOIN lecturers t ON cc.maGV = t.maGV 
     WHERE cc.maLHP = ?
 ");
 $stmtInfo->execute([$maLHP]);
@@ -57,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $roomConflict = $stmtRoom->fetch();
 
             // --- BƯỚC 2: KIỂM TRA TRÙNG LỊCH GIẢNG VIÊN ---
-            $checkTeacherSql = "
+            $checkLecturersql = "
                 SELECT cc.maLHP, c.tenMH 
                 FROM class_schedules cs
                 JOIN courseclasses cc ON cs.maLHP = cc.maLHP
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                   AND ? < (cs.start_period + cs.num_periods)
                 LIMIT 1
             ";
-            $stmtTeacher = $pdo->prepare($checkTeacherSql);
+            $stmtTeacher = $pdo->prepare($checkLecturersql);
             $stmtTeacher->execute([$classInfo['maGV'], $day_of_week, $start_period, $num_periods, $start_period]);
             $teacherConflict = $stmtTeacher->fetch();
 
@@ -124,8 +125,6 @@ $schedules = $stmtSchedules->fetchAll();
 // Lấy danh sách phòng học để đổ vào Form thêm lịch
 $roomsList = $pdo->query("SELECT room_id, room_name, capacity, room_type FROM rooms ORDER BY room_name ASC")->fetchAll();
 ?>
-
-
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Chi tiết & Xếp lịch học</h1>

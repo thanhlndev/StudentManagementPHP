@@ -2,15 +2,15 @@
 /** @var PDO $pdo */
 
 // 1. Lấy và kiểm tra ID từ URL
-$maLHP = isset($_GET['maLHP']) ? (int)$_GET['maLHP'] : 0;
+$maLHP = isset($_GET['maLHP']) ? (int) $_GET['maLHP'] : 0;
 
 // 2. Truy vấn thông tin Lớp học phần
-// JOIN chuẩn theo schema: CourseClasses -> Courses, Teachers, Semesters
+// JOIN chuẩn theo schema: CourseClasses -> Courses, Lecturers, Semesters
 $stmt = $pdo->prepare("
     SELECT cc.maLHP, c.tenMH, t.hoTenGV, t.email AS emailGV, s.tenHK
     FROM CourseClasses cc
     JOIN Courses c ON cc.maMH = c.maMH
-    JOIN Teachers t ON cc.maGV = t.maGV
+    JOIN Lecturers t ON cc.maGV = t.maGV
     JOIN Semesters s ON cc.maHK = s.maHK
     WHERE cc.maLHP = ?
 ");
@@ -73,12 +73,12 @@ $students = $stmtSv->fetchAll();
                     </thead>
                     <tbody>
                         <?php foreach ($students as $k => $sv): ?>
-                        <tr>
-                            <td><?= $k + 1 ?></td>
-                            <td class="font-weight-bold"><?= $sv['maSV'] ?></td>
-                            <td><?= htmlspecialchars($sv['hoTen']) ?></td>
-                            <td><?= htmlspecialchars($sv['email']) ?></td>
-                        </tr>
+                            <tr>
+                                <td><?= $k + 1 ?></td>
+                                <td class="font-weight-bold"><?= $sv['maSV'] ?></td>
+                                <td><?= htmlspecialchars($sv['hoTen']) ?></td>
+                                <td><?= htmlspecialchars($sv['email']) ?></td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

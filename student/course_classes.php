@@ -2,6 +2,14 @@
 /** @var PDO $pdo */
 
 $maSV = $_SESSION['user']['username'];
+//for testing purposes, you can uncomment the following lines to simulate POST requests with JSON or form-urlencoded data
+// $input = file_get_contents("php://input");
+// parse_str($input, $post_vars); // Nếu là form-urlencoded
+// if (empty($post_vars)) {
+//     $post_vars = json_decode($input, true); // Nếu là JSON
+// }
+// $maSV = isset($_POST['user_id']) ? $_POST['user_id'] : ($post_vars['user_id'] ?? '');
+// $maLHP_reg = isset($_POST['maLHP']) ? (int) $_POST['maLHP'] : (int) ($post_vars['maLHP'] ?? 0);
 
 // ==========================================
 // 1. XỬ LÝ LOGIC ĐĂNG KÝ HỌC PHẦN (POST)
@@ -22,6 +30,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $checkCount = $pdo->prepare("SELECT COUNT(*) FROM Grades WHERE maLHP = ?");
         $checkCount->execute([$maLHP_reg]);
         $currentCount = $checkCount->fetchColumn();
+
+        // [MỚI ĐƯỢC CẬP NHẬT] Lấy sức chứa tối đa của phòng học được xếp cho lớp này
+        $stmtCapacity = $pdo->prepare("
+            SELECT MAX(r.capacity)
+            FROM class_schedules cs
+            JOIN rooms r ON cs.room_id = r.room_id
+            WHERE cs.maLHP = ?
+        ");
+        $stmtCapacity->execute([$maLHP_reg]);
+        $roomCapacity = (int) $stmtCapacity->fetchColumn();
+        // Fallback an toàn: Nếu lớp chưa xếp phòng, đặt mặc định một con số an toàn (VD: 50)
+        if ($roomCapacity === 0) {
+            $roomCapacity = 50;
+        }
+
         // Lấy lịch của lớp muốn đăng ký (new_sch)
         //         ↓
         // So sánh với tất cả lịch các lớp mà sinh viên đã đăng ký (old_sch)
@@ -30,11 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         //         ↓
         // Kiểm tra hai khoảng tiết học có giao nhau hay không
         //         ↓
-        // COUNT(*) > 0
-        // => Bị trùng lịch
-
-        // COUNT(*) = 0
-        // => Không trùng lịch
+        // COUNT(*) > 0 => Bị trùng lịch
+        // COUNT(*) = 0 => Không trùng lịch
         $sqlCheckCollision = "
             SELECT COUNT(*) 
             FROM class_schedules new_sch
@@ -50,18 +70,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $isColliding = $stmtCollision->fetchColumn();
 
         if ($isRegistered > 0) {
+            file_put_contents('debug.log', "Thất bại: Sinh viên $maSV  đã đăng ký Lớp học phần #$maLHP_reg từ trước! - Thời gian: " . microtime(true) . PHP_EOL, FILE_APPEND);
             $_SESSION['msg'] = "Thất bại: Bạn đã đăng ký Lớp học phần #$maLHP_reg từ trước!";
             $_SESSION['msg_type'] = "warning";
-        } elseif ($currentCount >= 50) {
-            $_SESSION['msg'] = "Thất bại: Lớp học phần #$maLHP_reg đã đủ sĩ số!";
+        } elseif ($currentCount >= $roomCapacity) {
+            // [MỚI ĐƯỢC CẬP NHẬT] Kiểm tra theo sức chứa của phòng thay vì 50
+            file_put_contents('debug.log', "Thất bại: Sinh viên $maSV  đăng ký Lớp học phần #$maLHP_reg đã đủ sĩ số ($roomCapacity)! - Thời gian: " . microtime(true) . PHP_EOL, FILE_APPEND);
+            $_SESSION['msg'] = "Thất bại: Lớp học phần #$maLHP_reg đã đủ sức chứa ($roomCapacity sinh viên)!";
             $_SESSION['msg_type'] = "danger";
         } elseif ($isColliding > 0) {
+            file_put_contents('debug.log', "Thất bại: Sinh viên $maSV  có lịch trùng với Lớp học phần #$maLHP_reg! - Thời gian: " . microtime(true) . PHP_EOL, FILE_APPEND);
             $_SESSION['msg'] = "Thất bại: Lịch của Lớp học phần #$maLHP_reg bị trùng với thời khóa biểu hiện tại của bạn!";
             $_SESSION['msg_type'] = "danger";
         } else {
             $stmtInsert = $pdo->prepare("INSERT INTO Grades (maSV, maLHP) VALUES (?, ?)");
             $stmtInsert->execute([$maSV, $maLHP_reg]);
 
+            file_put_contents('debug.log', "Thành công: Sinh viên $maSV đã đăng ký lớp $maLHP_reg - Thời gian: " . microtime(true) . PHP_EOL, FILE_APPEND);
             $_SESSION['msg'] = "Thành công: Đã ghi danh vào Lớp học phần #$maLHP_reg!";
             $_SESSION['msg_type'] = "success";
         }
@@ -85,7 +110,6 @@ $keyword = trim($_GET['keyword'] ?? '');
 $filter_hk = $_GET['filter_hk'] ?? '';
 $hide_conflict = isset($_GET['hide_conflict']) ? 1 : 0;
 
-// [MỚI] Lấy Mã Khoa của sinh viên hiện tại để làm màng lọc
 $stmtKhoa = $pdo->prepare("
     SELECT cl.maKhoa 
     FROM students s 
@@ -97,7 +121,6 @@ $maKhoaSV = $stmtKhoa->fetchColumn();
 
 $semestersList = $pdo->query("SELECT maHK, tenHK FROM Semesters ORDER BY maHK DESC")->fetchAll();
 
-// Đưa maKhoaSV vào mảng tham số chuẩn
 $params = [
     ':maSV' => $maSV,
     ':maSV_1' => $maSV,
@@ -112,11 +135,12 @@ $baseSql = "SELECT
     COALESCE(g_agg.soLuongSV, 0) AS soLuongSV,
     COALESCE(g_agg.daDangKy, 0) AS daDangKy,
     max_diem.diemCaoNhat,
-    lich.thongTinLich
+    lich.thongTinLich,
+    COALESCE(cap.capacity, 50) AS capacity -- [MỚI ĐƯỢC CẬP NHẬT] Kéo thêm capacity
 FROM CourseClasses cc
 JOIN Courses c ON cc.maMH = c.maMH
 JOIN Semesters s ON cc.maHK = s.maHK
-JOIN Teachers t ON cc.maGV = t.maGV
+JOIN Lecturers t ON cc.maGV = t.maGV
 
 LEFT JOIN (
     SELECT 
@@ -149,10 +173,17 @@ LEFT JOIN (
     GROUP BY cs.maLHP
 ) lich ON cc.maLHP = lich.maLHP
 
-WHERE 1=1 
-  AND c.maKhoa = :maKhoaSV"; // [MỚI] Bắt buộc môn học phải thuộc Khoa của sinh viên
+-- [MỚI ĐƯỢC CẬP NHẬT] Subquery lấy sức chứa phòng lớn nhất của lớp đó
+LEFT JOIN (
+    SELECT cs.maLHP, MAX(r.capacity) AS capacity
+    FROM class_schedules cs
+    JOIN rooms r ON cs.room_id = r.room_id
+    GROUP BY cs.maLHP
+) cap ON cc.maLHP = cap.maLHP
 
-// Xử lý động (Dynamic Query Building)
+WHERE 1=1 
+  AND c.maKhoa = :maKhoaSV";
+
 if ($keyword !== '') {
     $baseSql .= " AND (cc.maLHP LIKE :kw1 OR c.tenMH LIKE :kw2)";
     $params[':kw1'] = "%$keyword%";
@@ -259,7 +290,9 @@ $classes = $stmt->fetchAll();
                     <?php else: ?>
                         <?php foreach ($classes as $c): ?>
                             <?php
-                            $isFull = ($c['soLuongSV'] >= 50);
+                            // [MỚI ĐƯỢC CẬP NHẬT] Gán sức chứa động từ DB
+                            $roomCapacity = (int) $c['capacity'];
+                            $isFull = ($c['soLuongSV'] >= $roomCapacity);
                             $isReg = ($c['daDangKy'] > 0);
                             ?>
                             <tr>
@@ -284,9 +317,9 @@ $classes = $stmt->fetchAll();
 
                                 <td class="align-middle">
                                     <span
-                                        class="badge <?= $isFull ? 'badge-danger' : ($c['soLuongSV'] >= 40 ? 'badge-warning text-dark' : 'badge-success') ?> p-2"
+                                        class="badge <?= $isFull ? 'badge-danger' : ($c['soLuongSV'] >= ($roomCapacity * 0.8) ? 'badge-warning text-dark' : 'badge-success') ?> p-2"
                                         style="font-size:13px;">
-                                        <i class="fas fa-users mr-1"></i> <?= $c['soLuongSV'] ?> / 50
+                                        <i class="fas fa-users mr-1"></i> <?= $c['soLuongSV'] ?> / <?= $roomCapacity ?>
                                     </span>
                                 </td>
 
